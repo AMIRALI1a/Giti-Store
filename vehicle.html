@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VIP VEHICLE | GITI ROLE PLAY</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange-1: #e9860f;
+    --orange-2: #c96b0a;
+    --orange-deep: #4a2506;
+    --ink: #1c1108;
+    --panel: #201409;
+    --panel-2: #170d05;
+    --panel-line: #3a2611;
+    --gold: #f2b705;
+    --cream: #fbead2;
+    --dim: #c79a6d;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+  html,body{
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Vazirmatn', sans-serif;
+    min-height: 100vh;
+  }
+
+  body{
+    background:
+      radial-gradient(ellipse 700px 460px at 50% 0%, var(--orange-1) 0%, var(--orange-2) 45%, var(--orange-deep) 78%, var(--ink) 100%);
+    background-attachment: fixed;
+    overscroll-behavior: none;
+  }
+
+  .wrap{
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  .topbar{ position: relative; height: 56px; margin-top: 10px; }
+
+  .back{
+    position: absolute;
+    top: 4px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--panel-line);
+    border-radius: 10px;
+    background: rgba(0,0,0,0.15);
+    text-decoration: none;
+    animation: fadeIn 0.5s ease 0.3s both;
+    transition: transform 0.15s ease;
+  }
+  .back:active{ transform: scale(0.92); }
+  .back img{ width: 16px; height: 16px; opacity: 0.9; }
+
+  .logo-slot{ position: absolute; top: 0; left: 0; }
+  .logo-slot img{
+    width: 58px;
+    display: block;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+    animation: logoArrive 0.65s cubic-bezier(.2,.8,.25,1) both;
+  }
+
+  @keyframes logoArrive{
+    0%{ transform: translate(150px, 30px) scale(2.05); opacity: 0; }
+    100%{ transform: translate(0,0) scale(1); opacity: 1; }
+  }
+  @keyframes fadeIn{
+    from{ opacity: 0; transform: translateY(-4px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .page-head{ margin-top: 18px; animation: fadeIn 0.5s ease 0.15s both; }
+
+  .eyebrow{
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 3px;
+    font-size: 12px;
+    color: var(--gold);
+    direction: ltr;
+  }
+
+  h1{
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 1px;
+    font-size: 28px;
+    color: var(--cream);
+    margin-top: 6px;
+    direction: ltr;
+    text-align: right;
+  }
+
+  .subtext{ color: var(--dim); font-size: 13px; line-height: 1.9; margin-top: 8px; }
+
+  .sortbar{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease 0.25s both;
+    z-index: 25;
+  }
+
+  .count{ font-size: 12px; color: var(--dim); }
+  .count b{ color: var(--cream); font-weight: 600; }
+
+  .sort-control{ position: relative; }
+
+  .sort-trigger{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    color: var(--cream);
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 9px 12px;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .sort-trigger img{ width: 14px; height: 14px; opacity: 0.9; }
+  .sort-trigger .sort-caret{ color: var(--gold); font-size: 10px; transition: transform 0.2s ease; }
+  .sort-trigger.open .sort-caret{ transform: rotate(180deg); }
+
+  .sort-panel{
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 172px;
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--panel-line);
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: 0 16px 34px rgba(0,0,0,0.55);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    transform-origin: top left;
+    z-index: 50;
+  }
+  .sort-panel.open{ opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  .sort-option{
+    background: transparent;
+    border: none;
+    color: var(--dim);
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 13px;
+    text-align: right;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .sort-option:active{ background: rgba(255,255,255,0.05); }
+  .sort-option.active{ background: rgba(242,183,5,0.14); color: var(--gold); font-weight: 600; }
+
+  .sort-overlay{ position: fixed; inset: 0; z-index: 20; display: none; }
+  .sort-overlay.open{ display: block; }
+
+  .rule{
+    height: 2px;
+    margin: 18px 0 20px;
+    background: linear-gradient(90deg, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
+    opacity: 0.5;
+  }
+
+  /* ---- horizontal single-column product rows (cars need wide images) ---- */
+  .grid{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card{
+    display: flex;
+    flex-direction: row;
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0;
+    animation: cardIn 0.4s ease forwards;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .card:active{ transform: scale(0.98); border-color: var(--gold); }
+
+  @keyframes cardIn{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .card-image{
+    width: 42%;
+    flex-shrink: 0;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(160deg, #2a1c0d, #140b04);
+    border-left: 1px solid var(--panel-line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-image .id-num{
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    opacity: 0.85;
+    direction: ltr;
+  }
+  .card-image .id-tag{
+    margin-top: 4px;
+    font-family: 'Anton', sans-serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    color: var(--dim);
+    direction: ltr;
+  }
+
+  .card-info{
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .card-title{
+    font-family: 'Anton', sans-serif;
+    font-size: 13.5px;
+    letter-spacing: 0.3px;
+    color: var(--cream);
+    direction: ltr;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .toman-amt{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    direction: ltr;
+    font-family: 'Anton', sans-serif;
+    font-size: 15px;
+    color: var(--gold);
+  }
+  .toman-amt img{ width: 14px; height: 14px; }
+
+  /* footer */
+  .footer{
+    margin-top: 26px;
+    text-align: center;
+    border-top: 1px solid var(--panel-line);
+    padding-top: 20px;
+  }
+
+  .footer-row{ display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+  .social-btn{
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  .social-btn:active{ transform: scale(0.92); }
+  .social-btn img{ width: 19px; height: 19px; opacity: 0.9; }
+
+  .footer-tag{ margin-top: 16px; font-size: 10px; letter-spacing: 2px; color: var(--dim); opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back" href="index.html" id="backBtn"><img src="icon-back.png" alt="بازگشت"></a>
+    <div class="logo-slot"><img src="logo.png" alt="GITI Role Play"></div>
+  </div>
+
+  <div class="page-head">
+    <div class="eyebrow">02 / STORE</div>
+    <h1>VIP VEHICLE</h1>
+    <p class="subtext">وسایل نقلیه پریمیوم با مشخصات و ظاهر ویژه، خارج از لیست معمولی سرور.</p>
+  </div>
+
+  <div class="sortbar">
+    <div class="count"><b>11</b> وسیله موجود</div>
+    <div class="sort-control">
+      <button class="sort-trigger" id="sortTrigger">
+        <img src="icon-layers.png" alt="">
+        <span id="sortLabel">پیش‌فرض</span>
+        <span class="sort-caret">▾</span>
+      </button>
+      <div class="sort-panel" id="sortPanel">
+        <button class="sort-option active" data-value="default">پیش‌فرض</button>
+        <button class="sort-option" data-value="price-desc">گران‌ترین</button>
+        <button class="sort-option" data-value="price-asc">ارزان‌ترین</button>
+        <button class="sort-option" data-value="id-asc">بر اساس ID</button>
+      </div>
+    </div>
+    <div class="sort-overlay" id="sortOverlay"></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="grid" id="grid">
+    <!-- cards injected by JS -->
+  </div>
+
+  <div class="footer">
+    <div class="footer-row">
+      <a class="social-btn" data-social="telegram" href="#"><img src="icon-telegram.png" alt="Telegram"></a>
+      <a class="social-btn" data-social="instagram" href="#"><img src="icon-instagram.png" alt="Instagram"></a>
+      <a class="social-btn" data-social="youtube" href="#"><img src="icon-youtube.png" alt="YouTube"></a>
+      <a class="social-btn" data-social="discord" href="#"><img src="icon-discord.png" alt="Discord"></a>
+    </div>
+    <div class="footer-tag">GITI ROLE PLAY — VIP VEHICLE</div>
+  </div>
+
+</div>
+
+<script>
+  let tg = null;
+  if (window.Telegram && window.Telegram.WebApp) {
+    tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+    if (tg.BackButton) {
+      tg.BackButton.show();
+      tg.BackButton.onClick(() => { window.location.href = "index.html"; });
+    }
+  }
+
+  const socialLinks = {
+    telegram:  "https://t.me/GitiRolePlay",
+    instagram: "https://www.instagram.com/gitirpofficial?igsh=YW43NWh0YmZlbTZu",
+    youtube:   "https://youtube.com/@gitirp?si=hdAkUo8BNQbCBGmJ",
+    discord:   "https://discord.gg/BP2UtCbPe",
+  };
+  document.querySelectorAll(".social-btn").forEach(el => {
+    const key = el.getAttribute("data-social");
+    if (key && socialLinks[key]) el.href = socialLinks[key];
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const url = el.getAttribute("href");
+      if (!url || url === "#") return;
+      if (tg) tg.openLink(url); else window.open(url, "_blank");
+    });
+  });
+
+  (function(){
+    let startX = 0, startY = 0, tracking = false;
+    document.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      tracking = (startX < 24 || startX > window.innerWidth - 24);
+    }, { passive: true });
+    document.addEventListener("touchend", (e) => {
+      if (!tracking) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = Math.abs(t.clientY - startY);
+      if (dy < 50) {
+        if ((startX < 24 && dx > 60) || (startX > window.innerWidth - 24 && dx < -60)) {
+          window.location.href = "index.html";
+        }
+      }
+      tracking = false;
+    }, { passive: true });
+  })();
+
+  const vehicles = [
+    { id: 444, name: "Monster",      price: 99000  },
+    { id: 471, name: "Quad",         price: 79000  },
+    { id: 487, name: "Maverick",     price: 139000 },
+    { id: 490, name: "FBI Rancher",  price: 139000 },
+    { id: 520, name: "Hydra",        price: 159000 },
+    { id: 568, name: "Bandito",      price: 99000  },
+    { id: 571, name: "Kart",         price: 79000  },
+    { id: 470, name: "Patriot",      price: 119000 },
+    { id: 452, name: "Speeder",      price: 79000  },
+    { id: 424, name: "BF Injection", price: 99000  },
+    { id: 409, name: "Stretch",      price: 159000 },
+  ];
+
+  const grid = document.getElementById("grid");
+
+  function fmt(n){ return n.toLocaleString("en-US"); }
+
+  function render(list){
+    grid.innerHTML = "";
+    list.forEach((s, i) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.animationDelay = (i * 0.04) + "s";
+      card.innerHTML = `
+        <div class="card-image">
+          <span class="id-num">#${s.id}</span>
+          <span class="id-tag">VEHICLE ID</span>
+        </div>
+        <div class="card-info">
+          <div class="card-title">Vehicle ID: ${s.id} - ${s.name}</div>
+          <span class="toman-amt"><img src="toman.png" alt="تومان"><span>${fmt(s.price)}</span></span>
+        </div>
+      `;
+      // No sub-page exists yet for individual vehicles — reserved for later.
+      card.addEventListener("click", () => {});
+      grid.appendChild(card);
+    });
+  }
+
+  function sortAndRender(mode){
+    let list = [...vehicles];
+    if (mode === "price-desc") list.sort((a,b) => b.price - a.price);
+    else if (mode === "price-asc") list.sort((a,b) => a.price - b.price);
+    else if (mode === "id-asc") list.sort((a,b) => a.id - b.id);
+    render(list);
+  }
+
+  render(vehicles);
+
+  const sortTrigger = document.getElementById("sortTrigger");
+  const sortPanel = document.getElementById("sortPanel");
+  const sortOverlay = document.getElementById("sortOverlay");
+  const sortLabel = document.getElementById("sortLabel");
+  const sortLabels = { "default": "پیش‌فرض", "price-desc": "گران‌ترین", "price-asc": "ارزان‌ترین", "id-asc": "بر اساس ID" };
+
+  function openSortPanel(){
+    sortPanel.classList.add("open");
+    sortTrigger.classList.add("open");
+    sortOverlay.classList.add("open");
+  }
+  function closeSortPanel(){
+    sortPanel.classList.remove("open");
+    sortTrigger.classList.remove("open");
+    sortOverlay.classList.remove("open");
+  }
+
+  sortTrigger.addEventListener("click", () => {
+    sortPanel.classList.contains("open") ? closeSortPanel() : openSortPanel();
+  });
+  sortOverlay.addEventListener("click", closeSortPanel);
+
+  sortPanel.querySelectorAll(".sort-option").forEach(opt => {
+    opt.addEventListener("click", () => {
+      sortPanel.querySelectorAll(".sort-option").forEach(o => o.classList.remove("active"));
+      opt.classList.add("active");
+      sortLabel.textContent = sortLabels[opt.dataset.value];
+      sortAndRender(opt.dataset.value);
+      closeSortPanel();
+    });
+  });
+</script>
+
+</body>
+</html>
