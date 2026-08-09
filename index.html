@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GITI ROLE PLAY | STORE</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange-1: #e9860f;
+    --orange-2: #c96b0a;
+    --orange-deep: #4a2506;
+    --ink: #1c1108;
+    --panel: #201409;
+    --panel-line: #3a2611;
+    --gold: #f2b705;
+    --cream: #fbead2;
+    --dim: #c79a6d;
+    --red: #b3401f;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+  html,body{
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Vazirmatn', sans-serif;
+    min-height: 100vh;
+  }
+
+  body{
+    background:
+      radial-gradient(ellipse 700px 500px at 50% 0%, var(--orange-1) 0%, var(--orange-2) 45%, var(--orange-deep) 78%, var(--ink) 100%);
+    background-attachment: fixed;
+  }
+
+  .wrap{
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  /* hero */
+  .hero{
+    position: relative;
+    padding-top: 8px;
+    text-align: center;
+  }
+
+  .hero-hamburger{
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .hero-hamburger img{ width: 18px; height: 18px; opacity: 0.9; }
+  .hero-hamburger:active{ transform: scale(0.92); }
+  .hero-hamburger.hide{ opacity: 0; pointer-events: none; transform: scale(0.7); }
+
+  /* sticky mini header (appears once you scroll past the hero logo) */
+  .mini-header{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    z-index: 60;
+    background: rgba(23,13,5,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--panel-line);
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(.2,.8,.25,1), opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .mini-header.show{ transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+  .mini-header-inner{
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+  }
+
+  .mini-logo{ width: 32px; height: 32px; display: block; }
+
+  .hamburger-btn{
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .hamburger-btn img{ width: 16px; height: 16px; opacity: 0.9; }
+  .hamburger-btn:active{ transform: translateY(-50%) scale(0.92); }
+
+  .logo{
+    width: 150px;
+    margin: 0 auto 4px;
+  }
+  .logo img{
+    width: 100%;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.4));
+  }
+
+  .store-tag{
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 4px;
+    font-size: 13px;
+    color: var(--gold);
+    margin-top: 14px;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.3);
+  }
+
+  h1{
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 800;
+    font-size: 21px;
+    color: var(--cream);
+    margin-top: 6px;
+  }
+
+  .tagline{
+    color: var(--dim);
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 10px;
+    line-height: 1.9;
+    padding: 0 8px;
+  }
+
+  .prompt{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-top: 18px;
+    opacity: 0.9;
+  }
+
+  .rule{
+    height: 2px;
+    margin: 20px 0 22px;
+    background: linear-gradient(90deg, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
+    opacity: 0.55;
+  }
+
+  /* list */
+  .list{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .item{
+    position: relative;
+    display: block;
+    background: linear-gradient(160deg, var(--panel), #170d05);
+    border: 1px solid var(--panel-line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .item:active{ transform: scale(0.98); border-color: var(--gold); }
+
+  .item::before{
+    content:"";
+    position: absolute;
+    right: 0; top: 10px; bottom: 10px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--gold);
+    opacity: 0.55;
+  }
+  .item:active::before{ opacity: 1; }
+
+  .item.soon{ opacity: 0.55; pointer-events: none; }
+  .item.soon::before{ background: var(--dim); opacity: 0.4; }
+
+  .soon-badge{
+    display: inline-block;
+    font-family: 'Anton', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 3px 9px;
+    border-radius: 5px;
+    direction: ltr;
+  }
+
+  .item.donate::before{ background: var(--red); }
+
+  .item-top{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .item-title{
+    font-family: 'Anton', sans-serif;
+    font-size: 19px;
+    letter-spacing: 1px;
+    color: var(--cream);
+    direction: ltr;
+    text-align: right;
+  }
+
+  .item-num{
+    font-family: 'Anton', sans-serif;
+    font-size: 12px;
+    color: var(--gold);
+    opacity: 0.7;
+    direction: ltr;
+  }
+
+  .item-desc{
+    font-size: 12.5px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-top: 6px;
+    padding-left: 20px;
+  }
+
+  .item-cta{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-top: 12px;
+  }
+
+  .item.donate .item-cta{ color: #e78b6a; }
+
+  .item-cta .arrow{
+    display: inline-block;
+    transform: rotate(180deg);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* footer */
+  .footer{
+    margin-top: 30px;
+    text-align: center;
+    border-top: 1px solid var(--panel-line);
+    padding-top: 20px;
+  }
+
+  .footer-row{
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .social-btn{
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .social-btn:active{ transform: scale(0.92); }
+  .social-btn img{ width: 19px; height: 19px; opacity: 0.9; }
+
+  .footer-tag{
+    margin-top: 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    opacity: 0.5;
+  }
+
+  /* hamburger menu sheet */
+  .menu-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 70;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .menu-backdrop.show{ opacity: 1; pointer-events: auto; }
+
+  .menu-sheet{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    max-height: 78vh;
+    background: linear-gradient(160deg, var(--panel), #170d05);
+    border: 1px solid var(--panel-line);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    z-index: 80;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(.2,.8,.25,1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .menu-sheet.show{ transform: translateY(0); }
+
+  .menu-handle{
+    width: 36px;
+    height: 4px;
+    border-radius: 3px;
+    background: var(--panel-line);
+    margin: 10px auto 2px;
+    flex-shrink: 0;
+  }
+
+  .menu-view{ display: flex; flex-direction: column; overflow: hidden; flex: 1; min-height: 0; }
+  .menu-view[hidden]{ display: none; }
+
+  .menu-header{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 14px;
+    border-bottom: 1px solid var(--panel-line);
+    flex-shrink: 0;
+  }
+
+  .menu-title{
+    font-family: 'Anton', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: var(--cream);
+    flex: 1;
+    text-align: center;
+  }
+
+  .menu-close, .menu-back{
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--dim);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .menu-back img{ width: 14px; height: 14px; opacity: 0.9; }
+
+  .menu-spacer{ width: 30px; flex-shrink: 0; }
+
+  .menu-body{ padding: 8px 12px 22px; overflow-y: auto; }
+
+  .menu-item{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 14px 10px;
+    color: var(--cream);
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 10px;
+    text-align: right;
+  }
+  .menu-item:active{ background: rgba(255,255,255,0.05); }
+  .menu-item img{ width: 18px; height: 18px; opacity: 0.9; flex-shrink: 0; }
+  .menu-item .label{ flex: 1; }
+  .menu-item .chev-ltr{ color: var(--dim); font-size: 14px; transform: rotate(180deg); }
+
+  .menu-divider{ height: 1px; background: var(--panel-line); margin: 6px 14px; }
+
+  .empty-state{
+    text-align: center;
+    color: var(--dim);
+    font-size: 13px;
+    padding: 44px 20px;
+  }
+
+  .order-row{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border: 1px solid var(--panel-line);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.02);
+  }
+  .order-row .order-top{ display: flex; justify-content: space-between; font-size: 13px; color: var(--cream); font-weight: 600; }
+  .order-row .order-date{ font-size: 11px; color: var(--dim); }
+
+  .about-text{
+    color: var(--dim);
+    font-size: 13px;
+    line-height: 2.1;
+    padding: 4px 6px 4px;
+  }
+
+  .about-social{
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px 10px 4px;
+    margin-top: 14px;
+    border-top: 1px solid var(--panel-line);
+  }
+</style>
+</head>
+<body>
+
+<div class="mini-header" id="miniHeader">
+  <div class="mini-header-inner">
+    <button class="hamburger-btn" id="miniHamburger"><img src="icon-hamburger.png" alt="منو"></button>
+    <img class="mini-logo" src="logo.png" alt="GITI Role Play">
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <button class="hero-hamburger" id="heroHamburger"><img src="icon-hamburger.png" alt="منو"></button>
+    <div class="logo"><img src="logo.png" alt="GTA Role Play"></div>
+    <div class="store-tag">SERVER STORE</div>
+    <h1>فروشگاه رسمی سرور</h1>
+    <p class="tagline">
+      آیتم‌های اختصاصی، وسایل نقلیه، املاک و امکانات ویژه<br>
+      برای بازیکنانی که می‌خوان تجربه‌ی متفاوتی از سرور داشته باشن.
+    </p>
+    <p class="prompt">بخش مورد نظرتو انتخاب کن:</p>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="list">
+
+    <a class="item" href="#" data-target="skin">
+      <div class="item-top">
+        <span class="item-title">VIP SKIN</span>
+        <span class="item-num">01</span>
+      </div>
+      <div class="item-desc">اسکین‌های اختصاصی با طراحی جدا از حالت پیش‌فرض بازی. برای بازیکنایی که می‌خوان ظاهر متفاوتی داشته باشن.</div>
+      <div class="item-cta">مشاهده اسکین‌ها <span class="arrow">‹</span></div>
+    </a>
+
+    <a class="item" href="#" data-target="vehicle">
+      <div class="item-top">
+        <span class="item-title">VIP VEHICLE</span>
+        <span class="item-num">02</span>
+      </div>
+      <div class="item-desc">وسایل نقلیه پریمیوم با مشخصات و ظاهر ویژه، خارج از لیست معمولی سرور.</div>
+      <div class="item-cta">مشاهده ماشین‌ها <span class="arrow">‹</span></div>
+    </a>
+
+    <a class="item soon" href="#" data-target="house">
+      <div class="item-top">
+        <span class="item-title">VIP HOUSE</span>
+        <span class="item-num">03</span>
+      </div>
+      <div class="item-desc">املاک اختصاصی سرور با موقعیت و امکانات بهتر نسبت به خانه‌های عادی.</div>
+      <div class="item-cta"><span class="soon-badge">SOON</span></div>
+    </a>
+
+    <a class="item" href="#" data-target="money">
+      <div class="item-top">
+        <span class="item-title">MONEY</span>
+        <span class="item-num">04</span>
+      </div>
+      <div class="item-desc">شارژ پول داخل بازی، سریع و بدون تاخیر.</div>
+      <div class="item-cta">شارژ همین حالا <span class="arrow">‹</span></div>
+    </a>
+
+    <a class="item soon" href="#" data-target="luckybox">
+      <div class="item-top">
+        <span class="item-title">LUCKY BOX</span>
+        <span class="item-num">05</span>
+      </div>
+      <div class="item-desc">جعبه‌های شانسی با احتمال دریافت آیتم‌های کمیاب و جوایز ویژه.</div>
+      <div class="item-cta"><span class="soon-badge">SOON</span></div>
+    </a>
+
+    <a class="item donate" href="#" data-target="donate">
+      <div class="item-top">
+        <span class="item-title">DONATE</span>
+        <span class="item-num">06</span>
+      </div>
+      <div class="item-desc">سکه‌های ویژه و تاثیرگذار بر قابلیت‌های شخصی.</div>
+      <div class="item-cta">مشاهده سکه‌ها <span class="arrow">‹</span></div>
+    </a>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-row">
+      <a class="social-btn" data-social="telegram" href="#"><img src="icon-telegram.png" alt="Telegram"></a>
+      <a class="social-btn" data-social="instagram" href="#"><img src="icon-instagram.png" alt="Instagram"></a>
+      <a class="social-btn" data-social="youtube" href="#"><img src="icon-youtube.png" alt="YouTube"></a>
+      <a class="social-btn" data-social="discord" href="#"><img src="icon-discord.png" alt="Discord"></a>
+    </div>
+    <div class="footer-tag">GITI ROLE PLAY</div>
+  </div>
+
+</div>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<div class="menu-sheet" id="menuSheet">
+  <div class="menu-handle"></div>
+
+  <div class="menu-view" data-view="main">
+    <div class="menu-header">
+      <span class="menu-spacer"></span>
+      <span class="menu-title">منو</span>
+      <button class="menu-close" id="menuClose">✕</button>
+    </div>
+    <div class="menu-body">
+      <button class="menu-item" data-goto="history">
+        <img src="icon-basket.png" alt="">
+        <span class="label">تاریخچه سفارشات</span>
+        <span class="chev-ltr">‹</span>
+      </button>
+      <div class="menu-divider"></div>
+      <button class="menu-item" data-goto="about">
+        <img src="icon-info.png" alt="">
+        <span class="label">درباره ما و سرور</span>
+        <span class="chev-ltr">‹</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="menu-view" data-view="history" hidden>
+    <div class="menu-header">
+      <button class="menu-back" data-back="main"><img src="icon-back.png" alt=""></button>
+      <span class="menu-title">تاریخچه سفارشات</span>
+      <span class="menu-spacer"></span>
+    </div>
+    <div class="menu-body" id="historyBody">
+      <div class="empty-state">تاریخچه شما خالی است</div>
+    </div>
+  </div>
+
+  <div class="menu-view" data-view="about" hidden>
+    <div class="menu-header">
+      <button class="menu-back" data-back="main"><img src="icon-back.png" alt=""></button>
+      <span class="menu-title">درباره ما و سرور</span>
+      <span class="menu-spacer"></span>
+    </div>
+    <div class="menu-body">
+      <p class="about-text">گیتی رول‌پلی یک سرور ساخته‌شده بر بستر SAMP است که به بازیکنان اجازه می‌دهد بازی Grand Theft Auto: San Andreas را در محیطی چندنفره و در کنار دوستان خود تجربه کنند. این سرور با بهره‌گیری از سیستم‌های پیشرفته چندنفره، تجربه‌ای پویاتر و فراگیرتر از نسخه آفلاین بازی ارائه می‌دهد و به کاربران امکان می‌دهد از قابلیت‌های تعاملی نوآورانه و نگاهی تازه به این بازی لذت ببرند.</p>
+      <div class="about-social">
+        <a class="social-btn" data-social="telegram" href="#"><img src="icon-telegram.png" alt="Telegram"></a>
+        <a class="social-btn" data-social="instagram" href="#"><img src="icon-instagram.png" alt="Instagram"></a>
+        <a class="social-btn" data-social="youtube" href="#"><img src="icon-youtube.png" alt="YouTube"></a>
+        <a class="social-btn" data-social="discord" href="#"><img src="icon-discord.png" alt="Discord"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let tg = null;
+  if (window.Telegram && window.Telegram.WebApp) {
+    tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+    if (tg.BackButton) tg.BackButton.hide();
+  }
+
+  const socialLinks = {
+    telegram:  "https://t.me/GitiRolePlay",
+    instagram: "https://www.instagram.com/gitirpofficial?igsh=YW43NWh0YmZlbTZu",
+    youtube:   "https://youtube.com/@gitirp?si=hdAkUo8BNQbCBGmJ",
+    discord:   "https://discord.gg/BP2UtCbPe",
+  };
+  document.querySelectorAll(".social-btn").forEach(el => {
+    const key = el.getAttribute("data-social");
+    if (key && socialLinks[key]) el.href = socialLinks[key];
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const url = el.getAttribute("href");
+      if (!url || url === "#") return;
+      if (tg) tg.openLink(url); else window.open(url, "_blank");
+    });
+  });
+
+  // --- sticky mini header (shrinks logo + hamburger into a compact bar on scroll) ---
+  const heroLogo = document.querySelector(".hero .logo");
+  const miniHeader = document.getElementById("miniHeader");
+  const heroHamburger = document.getElementById("heroHamburger");
+
+  if ("IntersectionObserver" in window && heroLogo) {
+    const headerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          miniHeader.classList.remove("show");
+          heroHamburger.classList.remove("hide");
+        } else {
+          miniHeader.classList.add("show");
+          heroHamburger.classList.add("hide");
+        }
+      });
+    }, { threshold: 0, rootMargin: "-56px 0px 0px 0px" });
+    headerObserver.observe(heroLogo);
+  }
+
+  // --- hamburger menu sheet ---
+  const menuBackdrop = document.getElementById("menuBackdrop");
+  const menuSheet = document.getElementById("menuSheet");
+  const menuViews = document.querySelectorAll(".menu-view");
+
+  function showMenuView(name){
+    menuViews.forEach(v => { v.hidden = (v.getAttribute("data-view") !== name); });
+  }
+  function openMenu(){
+    showMenuView("main");
+    menuBackdrop.classList.add("show");
+    menuSheet.classList.add("show");
+  }
+  function closeMenu(){
+    menuBackdrop.classList.remove("show");
+    menuSheet.classList.remove("show");
+  }
+
+  document.getElementById("miniHamburger").addEventListener("click", openMenu);
+  heroHamburger.addEventListener("click", openMenu);
+  document.getElementById("menuClose").addEventListener("click", closeMenu);
+  menuBackdrop.addEventListener("click", closeMenu);
+
+  document.querySelectorAll(".menu-item[data-goto]").forEach(btn => {
+    btn.addEventListener("click", () => showMenuView(btn.getAttribute("data-goto")));
+  });
+  document.querySelectorAll(".menu-back[data-back]").forEach(btn => {
+    btn.addEventListener("click", () => showMenuView(btn.getAttribute("data-back")));
+  });
+
+  // Replace with your real sub-page / bot links
+  const routes = {
+    skin:     "skin.html",
+    vehicle:  "vehicle.html",
+    house:    "https://t.me/yourbot/house",
+    money:    "money.html",
+    luckybox: "https://t.me/yourbot/luckybox",
+    donate:   "donate.html",
+  };
+
+  document.querySelectorAll(".item").forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const url = routes[el.getAttribute("data-target")];
+      if (!url) return;
+      if (url.startsWith("http")) {
+        if (tg) tg.openLink(url); else window.open(url, "_blank");
+      } else {
+        window.location.href = url;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DONATE | GITI ROLE PLAY</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange-1: #e9860f;
+    --orange-2: #c96b0a;
+    --orange-deep: #4a2506;
+    --ink: #1c1108;
+    --panel: #201409;
+    --panel-2: #170d05;
+    --panel-line: #3a2611;
+    --gold: #f2b705;
+    --cream: #fbead2;
+    --dim: #c79a6d;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+  html,body{
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Vazirmatn', sans-serif;
+    min-height: 100vh;
+  }
+
+  body{
+    background:
+      radial-gradient(ellipse 700px 460px at 50% 0%, var(--orange-1) 0%, var(--orange-2) 45%, var(--orange-deep) 78%, var(--ink) 100%);
+    background-attachment: fixed;
+  }
+
+  .wrap{
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  /* top bar: logo animates from lobby's top-center to top-left */
+  .topbar{
+    position: relative;
+    height: 56px;
+    margin-top: 10px;
+  }
+
+  .back{
+    position: absolute;
+    top: 4px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--panel-line);
+    border-radius: 10px;
+    background: rgba(0,0,0,0.15);
+    text-decoration: none;
+    animation: fadeIn 0.5s ease 0.3s both;
+    transition: transform 0.15s ease;
+  }
+  .back:active{ transform: scale(0.92); }
+  .back img{ width: 16px; height: 16px; opacity: 0.9; }
+
+  .logo-slot{
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .logo-slot img{
+    width: 58px;
+    display: block;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+    animation: logoArrive 0.65s cubic-bezier(.2,.8,.25,1) both;
+  }
+
+  @keyframes logoArrive{
+    0%{
+      transform: translate(150px, 30px) scale(2.05);
+      opacity: 0;
+    }
+    100%{
+      transform: translate(0,0) scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes fadeIn{
+    from{ opacity: 0; transform: translateY(-4px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  /* header */
+  .page-head{
+    margin-top: 18px;
+    animation: fadeIn 0.5s ease 0.15s both;
+  }
+
+  .eyebrow{
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 3px;
+    font-size: 12px;
+    color: var(--gold);
+    direction: ltr;
+  }
+
+  h1{
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 1px;
+    font-size: 28px;
+    color: var(--cream);
+    margin-top: 6px;
+    direction: ltr;
+    text-align: right;
+  }
+
+  .subtext{
+    color: var(--dim);
+    font-size: 13px;
+    line-height: 1.9;
+    margin-top: 8px;
+  }
+
+  /* sort bar */
+  .sortbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease 0.25s both;
+  }
+
+  .count{
+    font-size: 12px;
+    color: var(--dim);
+  }
+  .count b{ color: var(--cream); font-weight: 600; }
+
+  .sort-select{
+    position: relative;
+  }
+
+  select{
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    color: var(--cream);
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 9px 32px 9px 14px;
+    border-radius: 8px;
+    outline: none;
+  }
+  .sort-select::after{
+    content: "▾";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 11px;
+    pointer-events: none;
+  }
+
+  .rule{
+    height: 2px;
+    margin: 18px 0 20px;
+    background: linear-gradient(90deg, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
+    opacity: 0.5;
+  }
+
+  /* grid */
+  .grid{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--panel-line);
+    border-radius: 12px;
+    padding: 14px;
+    opacity: 0;
+    animation: cardIn 0.4s ease forwards;
+  }
+
+  @keyframes cardIn{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top-row{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .thumb{
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    background: linear-gradient(160deg, #2a1c0d, #140b04);
+    border: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .thumb .id-num{
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    color: var(--gold);
+    opacity: 0.85;
+    direction: ltr;
+  }
+  .thumb .id-tag{
+    position: absolute;
+    bottom: 4px;
+    font-family: 'Anton', sans-serif;
+    font-size: 7px;
+    letter-spacing: 1px;
+    color: var(--dim);
+    direction: ltr;
+  }
+
+  .card-title{
+    font-family: 'Anton', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: var(--cream);
+    direction: ltr;
+    text-align: right;
+  }
+
+  .price{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
+    direction: ltr;
+    margin-top: 6px;
+  }
+  .price img{ width: 14px; height: 14px; opacity: 0.9; }
+
+  .buy{
+    width: 100%;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 11px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  .buy:active{ transform: scale(0.98); }
+
+  .footer{
+    margin-top: 26px;
+    text-align: center;
+    border-top: 1px solid var(--panel-line);
+    padding-top: 20px;
+  }
+
+  .footer-row{
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .social-btn{
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .social-btn:active{ transform: scale(0.92); }
+  .social-btn img{ width: 19px; height: 19px; opacity: 0.9; }
+
+  .footer-tag{
+    margin-top: 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    opacity: 0.5;
+  }
+
+  /* ---- money slider panel ---- */
+  .slider-panel{
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 26px 20px 22px;
+    animation: fadeIn 0.5s ease 0.3s both;
+  }
+
+  .amount-display{
+    text-align: center;
+    direction: ltr;
+  }
+  .amount-display #amountValue{
+    font-family: 'Anton', sans-serif;
+    font-size: 46px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .amount-input{
+    font-family: 'Anton', sans-serif;
+    font-size: 46px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    width: 160px;
+    -moz-appearance: textfield;
+    border-bottom: 2px dashed transparent;
+    transition: border-color 0.15s ease;
+  }
+  .amount-input::-webkit-outer-spin-button,
+  .amount-input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .amount-input:focus{ border-bottom-color: var(--gold); }
+  .amount-display .unit{
+    display: block;
+    font-size: 12.5px;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  .slider-box{
+    position: relative;
+    margin-top: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    direction: ltr;
+  }
+
+  .slider-track-bg{
+    position: absolute;
+    left: 0; right: 0;
+    height: 6px;
+    border-radius: 4px;
+    background: #150c04;
+    border: 1px solid var(--panel-line);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .slider-fill{
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--orange-2), var(--gold));
+    border-radius: 4px;
+  }
+
+  input[type="range"]{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 26px;
+    background: transparent;
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    direction: ltr;
+  }
+  input[type="range"]::-webkit-slider-runnable-track{
+    background: transparent;
+    height: 6px;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid var(--ink);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    margin-top: -9px;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-track{
+    background: transparent;
+    height: 6px;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid var(--ink);
+    cursor: pointer;
+  }
+
+  .slider-minmax{
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 6px;
+    direction: ltr;
+  }
+
+  .rate-note{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    font-size: 12px;
+    color: var(--dim);
+    margin-top: 14px;
+    white-space: nowrap;
+  }
+  .rate-note .toman-amt{ font-size: 12px; color: var(--dim); white-space: nowrap; }
+
+  .toman-amt{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    direction: ltr;
+  }
+  .toman-amt img{ width: 14px; height: 14px; flex-shrink: 0; }
+
+  .rule2{
+    height: 1px;
+    background: var(--panel-line);
+    margin: 18px 0 18px;
+  }
+
+  .price-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .price-label{
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  .price-display{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Anton', sans-serif;
+    font-size: 20px;
+    color: var(--gold);
+  }
+  .price-display .toman-amt img{ width: 18px; height: 18px; }
+
+  .price-display.pulse{ animation: pricePulse 0.22s ease; }
+  @keyframes pricePulse{
+    0%{ transform: scale(1); }
+    50%{ transform: scale(1.08); }
+    100%{ transform: scale(1); }
+  }
+
+  .confirm-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: rgba(242,183,5,0.08);
+    border: 1px solid rgba(242,183,5,0.35);
+    border-radius: 10px;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: none;
+  }
+  .confirm-box.show{
+    animation: confirmIn 0.35s ease forwards;
+  }
+  @keyframes confirmIn{
+    0%{ opacity: 0; max-height: 0; transform: translateY(-4px); }
+    100%{ opacity: 1; max-height: 60px; transform: translateY(0); }
+  }
+
+  .confirm-label{
+    font-size: 11.5px;
+    color: var(--dim);
+    flex-shrink: 0;
+  }
+  .confirm-value{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .confirm-value bdi{ direction: ltr; unicode-bidi: isolate; }
+  .confirm-value .toman-amt img{ width: 13px; height: 13px; }
+
+  .buy.wide{
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back" href="index.html" id="backBtn"><img src="icon-back.png" alt="بازگشت"></a>
+    <div class="logo-slot"><img src="logo.png" alt="GTA Role Play"></div>
+  </div>
+
+  <div class="page-head">
+    <div class="eyebrow">06 / STORE</div>
+    <h1>DONATE</h1>
+    <p class="subtext">سکه‌های ویژه و تاثیرگذار بر قابلیت‌های شخصی.</p>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="slider-panel">
+
+    <div class="amount-display">
+      <input type="number" id="amountValue" class="amount-input" min="0" max="5000" step="1" value="0" inputmode="numeric">
+      <span class="unit">سکه</span>
+    </div>
+
+    <div class="slider-box">
+      <input type="range" id="moneySlider" min="0" max="5000" step="1" value="0">
+      <div class="slider-track-bg"><div class="slider-fill" id="sliderFill"></div></div>
+    </div>
+    <div class="slider-minmax">
+      <span>0</span>
+      <span>5000</span>
+    </div>
+
+    <div class="rate-note">
+      <span>هر <bdi>100</bdi> سکه =</span>
+      <span class="toman-amt"><img src="toman.png" alt="تومان"><bdi>20,000</bdi></span>
+    </div>
+
+    <div class="rule2"></div>
+
+    <div class="price-row">
+      <span class="price-label">مبلغ قابل پرداخت</span>
+      <span class="price-display" id="priceDisplay">
+        <span class="toman-amt"><img src="toman.png" alt="تومان"><span id="priceValue">0</span></span>
+      </span>
+    </div>
+
+    <div class="confirm-box" id="confirmBox">
+      <span class="confirm-label">مقدار انتخابی</span>
+      <span class="confirm-value" id="confirmValue">—</span>
+    </div>
+
+    <button class="buy wide" id="buyBtn">خرید</button>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-row">
+      <a class="social-btn" id="tg-link" href="#"><img src="icon-telegram.png" alt="Telegram"></a>
+      <a class="social-btn" id="ig-link" href="#"><img src="icon-instagram.png" alt="Instagram"></a>
+      <a class="social-btn" id="yt-link" href="#"><img src="icon-youtube.png" alt="YouTube"></a>
+      <a class="social-btn" id="dc-link" href="#"><img src="icon-discord.png" alt="Discord"></a>
+    </div>
+    <div class="footer-tag">GITI ROLE PLAY — DONATE</div>
+  </div>
+
+</div>
+
+<script>
+  let tg = null;
+  if (window.Telegram && window.Telegram.WebApp) {
+    tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+    if (tg.BackButton) {
+      tg.BackButton.show();
+      tg.BackButton.onClick(() => { window.location.href = "index.html"; });
+    }
+  }
+
+  document.querySelectorAll(".social-btn").forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const url = el.getAttribute("href");
+      if (!url || url === "#") return;
+      if (tg) tg.openLink(url); else window.open(url, "_blank");
+    });
+  });
+  document.getElementById("tg-link").href = "https://t.me/GitiRolePlay";
+  document.getElementById("ig-link").href = "https://www.instagram.com/gitirpofficial?igsh=YW43NWh0YmZlbTZu";
+  document.getElementById("yt-link").href = "https://youtube.com/@gitirp?si=hdAkUo8BNQbCBGmJ";
+  document.getElementById("dc-link").href = "https://discord.gg/BP2UtCbPe";
+
+  (function(){
+    let startX = 0, startY = 0, tracking = false;
+    document.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      tracking = (startX < 24 || startX > window.innerWidth - 24);
+    }, { passive: true });
+    document.addEventListener("touchend", (e) => {
+      if (!tracking) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = Math.abs(t.clientY - startY);
+      if (dy < 50) {
+        if ((startX < 24 && dx > 60) || (startX > window.innerWidth - 24 && dx < -60)) {
+          window.location.href = "index.html";
+        }
+      }
+      tracking = false;
+    }, { passive: true });
+  })();
+
+  const RATE = 200; // toman per 1 coin (100 coins = 20,000 toman)
+  const MAX = 5000;
+  const slider = document.getElementById("moneySlider");
+  const amountValue = document.getElementById("amountValue");
+  const priceValue = document.getElementById("priceValue");
+  const priceDisplay = document.getElementById("priceDisplay");
+  const sliderFill = document.getElementById("sliderFill");
+  const confirmBox = document.getElementById("confirmBox");
+  const confirmValue = document.getElementById("confirmValue");
+  const buyBtn = document.getElementById("buyBtn");
+
+  function fmt(n){ return n.toLocaleString("en-US"); }
+
+  function formatCoins(v){
+    return Math.round(v).toLocaleString("en-US");
+  }
+
+  function update(pulse){
+    const v = parseFloat(slider.value);
+    const price = Math.round(v * RATE);
+    amountValue.value = Math.round(v);
+    priceValue.textContent = fmt(price);
+    sliderFill.style.width = (v / MAX * 100) + "%";
+
+    if (pulse) {
+      priceDisplay.classList.remove("pulse");
+      void priceDisplay.offsetWidth;
+      priceDisplay.classList.add("pulse");
+    }
+  }
+
+  // Like update(), but never touches amountValue.value — used while the
+  // user is actively typing so we don't fight their keystrokes.
+  function updatePriceOnly(pulse){
+    const v = parseFloat(slider.value);
+    const price = Math.round(v * RATE);
+    priceValue.textContent = fmt(price);
+    sliderFill.style.width = (v / MAX * 100) + "%";
+
+    if (pulse) {
+      priceDisplay.classList.remove("pulse");
+      void priceDisplay.offsetWidth;
+      priceDisplay.classList.add("pulse");
+    }
+  }
+
+  function confirmSelection(){
+    const v = parseFloat(slider.value);
+    const price = Math.round(v * RATE);
+    if (v <= 0){
+      confirmBox.classList.remove("show");
+      buyBtn.textContent = "خرید";
+      return;
+    }
+    confirmValue.innerHTML = `<bdi>${formatCoins(v)}</bdi> سکه — <span class="toman-amt"><img src="toman.png" alt="تومان"><span>${fmt(price)}</span></span>`;
+    confirmBox.classList.remove("show");
+    void confirmBox.offsetWidth;
+    confirmBox.classList.add("show");
+    buyBtn.textContent = `خرید ${formatCoins(v)} سکه`;
+  }
+
+  function setFromInput(){
+    let v = parseInt(amountValue.value || "0", 10);
+    if (isNaN(v)) v = 0;
+    v = Math.max(0, Math.min(MAX, v));
+    slider.value = v;
+    return v;
+  }
+
+  slider.addEventListener("input", () => update(true));
+  slider.addEventListener("change", confirmSelection);
+  slider.addEventListener("mouseup", confirmSelection);
+  slider.addEventListener("touchend", confirmSelection);
+
+  amountValue.addEventListener("input", () => { setFromInput(); updatePriceOnly(true); });
+  amountValue.addEventListener("change", () => { setFromInput(); update(false); confirmSelection(); });
+
+  update(false);
+
+  buyBtn.addEventListener("click", () => {
+    const v = parseFloat(slider.value);
+    if (v <= 0) return;
+    const url = `https://t.me/yourbot?start=buy_donate_${v}`;
+    if (tg) {
+      tg.openTelegramLink(url);
+    } else {
+      window.open(url, "_blank");
+    }
+  });
+</script>
+
+</body>
+</html>
