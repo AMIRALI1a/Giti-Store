@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GITI ROLE PLAY | STORE</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-top: #1E1E36;
+  --bg-bottom: #0F1120;
+  --ink: #1E1E36;
+  --panel: #262646;
+  --panel-2: #17172c;
+  --panel-line: #38386080;
+  --gold: #FFD4A9;
+  --cream: #ffffff;
+  --dim: #a9a9cc;
+}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html,body{
+  background: var(--bg-bottom);
+  color: var(--cream);
+  font-family: 'Vazirmatn', sans-serif;
+  min-height: 100vh;
+}
+body{
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  background-attachment: fixed;
+}
+.wrap{
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+
+/* top bar — fixed, identical size/behavior to the main site's hamburger (always visible, no shrink/hide dance) */
+.hamburger-btn{
+  position: fixed;
+  top: 16px; right: 18px;
+  z-index: 90;
+  width: 44px; height: 44px;
+  background: none;
+  border: none;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
+  cursor:pointer;
+}
+.hb-bar{
+  width: 22px; height: 2px; border-radius: 2px;
+  background: var(--cream);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger-btn.open .hb-bar:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+.hamburger-btn.open .hb-bar:nth-child(2){ opacity: 0; }
+.hamburger-btn.open .hb-bar:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+.hamburger-btn:active{ opacity: 0.7; }
+
+/* hero */
+.hero{
+  position: relative;
+  padding-top: 64px; /* pushed down below the fixed hamburger, matching the main site's top spacing */
+  text-align: center;
+}
+.logo{
+  width: 150px;
+  margin: 0 auto 4px;
+}
+.logo img{
+  width: 100%;
+  display: block;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.4));
+}
+.store-tag{
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 4px;
+  font-size: 13px;
+  color: var(--gold);
+  margin-top: 14px;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.3);
+}
+h1{
+  font-family: 'Vazirmatn', sans-serif;
+  font-weight: 800;
+  font-size: 21px;
+  color: var(--cream);
+  margin-top: 6px;
+}
+.tagline{
+  color: var(--dim);
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 10px;
+  line-height: 1.9;
+  padding: 0 8px;
+}
+.prompt{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-top: 18px;
+  opacity: 0.9;
+}
+.rule{
+  height: 2px;
+  margin: 20px 0 22px;
+  background: linear-gradient(90deg, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
+  opacity: 0.55;
+}
+
+/* list */
+.list{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.item{
+  position: relative;
+  display: block;
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--panel-line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.item:active{ transform: scale(0.98); border-color: var(--gold); }
+.item::before{
+  content:"";
+  position: absolute;
+  right: 0; top: 10px; bottom: 10px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--gold);
+  opacity: 0.55;
+}
+.item:active::before{ opacity: 1; }
+.item.soon{ opacity: 0.55; pointer-events: none; }
+.item.soon::before{ background: var(--dim); opacity: 0.4; }
+.soon-badge{
+  display: inline-block;
+  font-family: 'Anton', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 3px 9px;
+  border-radius: 5px;
+  direction: ltr;
+}
+/* Donate now shares the same brand accent (gold) as every other item — no more red */
+.item-top{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.item-title{
+  font-family: 'Anton', sans-serif;
+  font-size: 19px;
+  letter-spacing: 1px;
+  color: var(--cream);
+  direction: ltr;
+  text-align: right;
+}
+.item-num{
+  font-family: 'Anton', sans-serif;
+  font-size: 12px;
+  color: var(--gold);
+  opacity: 0.7;
+  direction: ltr;
+}
+.item-desc{
+  font-size: 12.5px;
+  color: var(--dim);
+  line-height: 1.8;
+  margin-top: 6px;
+  padding-left: 20px;
+}
+.item-cta{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 12px;
+}
+.item-cta .arrow{
+  display: inline-block;
+  transform: rotate(180deg);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* footer */
+.footer{
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid var(--panel-line);
+  padding-top: 20px;
+}
+.footer-row{
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.social-btn{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--panel-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.social-btn:active{ transform: scale(0.92); }
+.social-btn img{ width: 19px; height: 19px; opacity: 0.9; }
+.footer-tag{
+  margin-top: 16px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  opacity: 0.5;
+}
+
+/* hamburger menu — right-side sliding drawer, identical structure/animation to the main site */
+.menu-backdrop{
+  position: fixed; inset:0; background: rgba(0,0,0,0.55);
+  z-index: 70; opacity:0; pointer-events:none; transition: opacity .25s ease;
+}
+.menu-backdrop.show{ opacity:1; pointer-events:auto; }
+.menu-sheet{
+  position: fixed; top:0; right:0; bottom:0;
+  width: min(300px, 82vw);
+  background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  border-left: 1px solid var(--panel-line);
+  z-index: 80;
+  transform: translateX(100%);
+  transition: transform .32s cubic-bezier(.2,.8,.25,1);
+  overflow-y: auto;
+  padding: 18px 18px 24px;
+}
+.menu-sheet.show{ transform: translateX(0); }
+.menu-lang-row{
+  display:flex; align-items:center; gap:14px; justify-content:flex-start;
+  font-family:'Vazirmatn'; font-size:12.5px; font-weight:600; color: var(--cream);
+  direction: ltr;
+}
+.menu-lang-row span{ display:flex; align-items:center; gap:5px; opacity:0.9; }
+.menu-lang-row svg{ width:14px; height:14px; }
+.menu-brand-row{
+  display:flex; align-items:center; gap:10px; margin-top: 26px;
+  direction: ltr; justify-content:flex-start;
+}
+.menu-brand-row img{ height: 20px; }
+.menu-brand-sep{ color: var(--panel-line); font-size: 14px; }
+.menu-brand-name{ font-family:'Vazirmatn'; font-weight:700; font-size:13px; color: var(--cream); direction:ltr; }
+.menu-title{ font-family:'Anton', sans-serif; font-size:14px; letter-spacing:0.5px; color:var(--cream); }
+.menu-body{ margin-top: 30px; display:flex; flex-direction:column; }
+.menu-item{
+  display:flex; align-items:center; gap:10px; width:100%;
+  background:transparent; border:none; padding:13px 0;
+  color:var(--cream); font-family:'Vazirmatn'; font-size:19px; font-weight:800;
+  cursor:pointer; text-align:right; text-decoration:none;
+  transition: color 0.15s ease;
+}
+.menu-item.active{ color: var(--gold); }
+.menu-item .chev{ margin-inline-start:auto; color:var(--dim); font-size:16px; transform:rotate(180deg); }
+.menu-view[hidden]{ display:none; }
+.menu-back{
+  display:flex; align-items:center; gap:8px;
+  width:100%; background:transparent; border:none; padding: 46px 0 18px;
+  color:var(--dim); font-family:'Vazirmatn'; font-size:13px; cursor:pointer;
+}
+.chev-back{ transform: rotate(0deg); display:inline-block; font-size:16px; }
+.empty-state{
+  text-align: center;
+  color: var(--dim);
+  font-size: 13px;
+  padding: 44px 20px;
+}
+.order-row{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--panel-line);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  background: rgba(255,255,255,0.02);
+}
+.order-row .order-top{ display: flex; justify-content: space-between; font-size: 13px; color: var(--cream); font-weight: 600; }
+.order-row .order-date{ font-size: 11px; color: var(--dim); }
+</style>
+</head>
+<body>
+
+<button class="hamburger-btn" id="heroHamburger">
+  <span class="hb-bar"></span><span class="hb-bar"></span><span class="hb-bar"></span>
+</button>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="logo"><img src="logo.png" alt="GTA Role Play"></div>
+    <div class="store-tag">SERVER STORE</div>
+    <h1>فروشگاه رسمی سرور</h1>
+    <p class="tagline">
+      آیتم‌های اختصاصی، وسایل نقلیه، املاک و امکانات ویژه<br>
+      برای بازیکنانی که می‌خوان تجربه‌ی متفاوتی از سرور داشته باشن.
+    </p>
+    <p class="prompt">بخش مورد نظرتو انتخاب کن:</p>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="list">
+    <a class="item" href="#" data-target="skin">
+      <div class="item-top">
+        <span class="item-title">VIP SKIN</span>
+        <span class="item-num">01</span>
+      </div>
+      <div class="item-desc">اسکین‌های اختصاصی با طراحی جدا از حالت پیش‌فرض بازی. برای بازیکنایی که می‌خوان ظاهر متفاوتی داشته باشن.</div>
+      <div class="item-cta">مشاهده اسکین‌ها <span class="arrow">‹</span></div>
+    </a>
+
+    <a class="item" href="#" data-target="vehicle">
+      <div class="item-top">
+        <span class="item-title">VIP VEHICLE</span>
+        <span class="item-num">02</span>
+      </div>
+      <div class="item-desc">وسایل نقلیه پریمیوم با مشخصات و ظاهر ویژه، خارج از لیست معمولی سرور.</div>
+      <div class="item-cta">مشاهده ماشین‌ها <span class="arrow">‹</span></div>
+    </a>
+
+    <a class="item soon" href="#" data-target="house">
+      <div class="item-top">
+        <span class="item-title">VIP HOUSE</span>
+        <span class="item-num">03</span>
+      </div>
+      <div class="item-desc">املاک اختصاصی سرور با موقعیت و امکانات بهتر نسبت به خانه‌های عادی.</div>
+      <div class="item-cta"><span class="soon-badge">SOON</span></div>
+    </a>
+
+    <a class="item" href="#" data-target="money">
+      <div class="item-top">
+        <span class="item-title">MONEY</span>
+        <span class="item-num">04</span>
+      </div>
+      <div class="item-desc">شارژ پول داخل بازی، سریع و بدون تاخیر.</div>
+      <div class="item-cta">شارژ همین حالا <span class="arrow">‹</span></div>
+    </a>
+
+    <a class="item soon" href="#" data-target="luckybox">
+      <div class="item-top">
+        <span class="item-title">LUCKY BOX</span>
+        <span class="item-num">05</span>
+      </div>
+      <div class="item-desc">جعبه‌های شانسی با احتمال دریافت آیتم‌های کمیاب و جوایز ویژه.</div>
+      <div class="item-cta"><span class="soon-badge">SOON</span></div>
+    </a>
+
+    <a class="item" href="#" data-target="donate">
+      <div class="item-top">
+        <span class="item-title">DONATE</span>
+        <span class="item-num">06</span>
+      </div>
+      <div class="item-desc">سکه‌های ویژه و تاثیرگذار بر قابلیت‌های شخصی.</div>
+      <div class="item-cta">مشاهده سکه‌ها <span class="arrow">‹</span></div>
+    </a>
+  </div>
+
+  <div class="footer">
+    <div class="footer-row">
+      <a class="social-btn" data-social="telegram" href="#"><img src="icon-telegram.png" alt="Telegram"></a>
+      <a class="social-btn" data-social="instagram" href="#"><img src="icon-instagram.png" alt="Instagram"></a>
+      <a class="social-btn" data-social="youtube" href="#"><img src="icon-youtube.png" alt="YouTube"></a>
+      <a class="social-btn" data-social="discord" href="#"><img src="icon-discord.png" alt="Discord"></a>
+    </div>
+    <div class="footer-tag">GITI ROLE PLAY</div>
+  </div>
+</div>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<div class="menu-sheet" id="menuSheet">
+
+  <div class="menu-view" data-view="main">
+    <div class="menu-lang-row">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg> فارسی</span>
+    </div>
+    <div class="menu-brand-row">
+      <img src="logo.png" alt="">
+      <span class="menu-brand-sep">|</span>
+      <span class="menu-brand-name">Giti Role Play</span>
+    </div>
+
+    <div class="menu-body">
+      <a class="menu-item" href="https://gitirp.ir">
+        <span>خانه</span>
+      </a>
+      <button class="menu-item" data-goto="history">
+        <span>سفارشات</span>
+        <span class="chev">‹</span>
+      </button>
+      <!-- TODO: confirm the real admin-login URL — placeholder points at the main site's admin page -->
+      <a class="menu-item" href="https://gitirp.ir/admin.html">
+        <span>ورود مدیران</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="menu-view" data-view="history" hidden>
+    <button class="menu-back" data-back="main"><span class="chev-back">›</span> برگشت</button>
+    <div class="menu-body" id="historyBody">
+      <div class="empty-state">تاریخچه شما خالی است</div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+let tg = null;
+if (window.Telegram && window.Telegram.WebApp) {
+  tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+  if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+  if (tg.BackButton) tg.BackButton.hide();
+}
+
+const socialLinks = {
+  telegram: "https://t.me/GitiRolePlay",
+  instagram: "https://www.instagram.com/gitirpofficial?igsh=YW43NWh0YmZlbTZu",
+  youtube: "https://youtube.com/@gitirp?si=hdAkUo8BNQbCBGmJ",
+  discord: "https://discord.gg/BP2UtCbPe",
+};
+document.querySelectorAll(".social-btn").forEach(el => {
+  const key = el.getAttribute("data-social");
+  if (key && socialLinks[key]) el.href = socialLinks[key];
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = el.getAttribute("href");
+    if (!url || url === "#") return;
+    if (tg) tg.openLink(url); else window.open(url, "_blank");
+  });
+});
+
+// --- hamburger menu (right-side drawer, hamburger morphs into an X — same as the main site) ---
+const menuBackdrop = document.getElementById("menuBackdrop");
+const menuSheet = document.getElementById("menuSheet");
+const menuViews = document.querySelectorAll(".menu-view");
+const heroHamburger = document.getElementById("heroHamburger");
+
+function showMenuView(name){
+  menuViews.forEach(v => { v.hidden = (v.getAttribute("data-view") !== name); });
+}
+function openMenu(){
+  showMenuView("main");
+  menuBackdrop.classList.add("show");
+  menuSheet.classList.add("show");
+  heroHamburger.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeMenu(){
+  menuBackdrop.classList.remove("show");
+  menuSheet.classList.remove("show");
+  heroHamburger.classList.remove("open");
+  document.body.style.overflow = "";
+}
+heroHamburger.addEventListener("click", () => {
+  heroHamburger.classList.contains("open") ? closeMenu() : openMenu();
+});
+menuBackdrop.addEventListener("click", closeMenu);
+document.querySelectorAll(".menu-item[data-goto]").forEach(btn => {
+  btn.addEventListener("click", () => showMenuView(btn.getAttribute("data-goto")));
+});
+document.querySelectorAll(".menu-back[data-back]").forEach(btn => {
+  btn.addEventListener("click", () => showMenuView(btn.getAttribute("data-back")));
+});
+
+// Replace with your real sub-page / bot links
+const routes = {
+  skin: "skin.html",
+  vehicle: "vehicle.html",
+  house: "https://t.me/yourbot/house",
+  money: "money.html",
+  luckybox: "https://t.me/yourbot/luckybox",
+  donate: "donate.html",
+};
+document.querySelectorAll(".item").forEach(el => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = routes[el.getAttribute("data-target")];
+    if (!url) return;
+    if (url.startsWith("http")) {
+      if (tg) tg.openLink(url); else window.open(url, "_blank");
+    } else {
+      window.location.href = url;
+    }
+  });
+});
+</script>
+</body>
+</html>
