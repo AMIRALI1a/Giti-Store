@@ -183,6 +183,7 @@
   }
 
   /* ---- 2-column product grid ---- */
+  .catalog-empty{width:100%;grid-column:1/-1;text-align:center;padding:28px 18px;margin:4px 0;color:#a9a9cc;background:rgba(38,38,70,.55);border:1px solid #38386080;border-radius:12px;font-size:14px;line-height:1.9;}
   .grid{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -413,6 +414,10 @@
 
   function render(list){
     grid.innerHTML = "";
+    if (!list.length) {
+      grid.innerHTML = '<div class="catalog-empty" role="status">فعلاً اسکینی برای نمایش ثبت نشده است.</div>';
+      return;
+    }
     list.forEach((s, i) => {
       const card = document.createElement("div");
       card.className = "card";
