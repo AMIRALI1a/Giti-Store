@@ -451,7 +451,7 @@
         </div>
         <div class="card-info">
           <div class="card-title">Vehicle ID: ${escapeHTML(s.id)} - ${escapeHTML(s.name)}</div>
-          <span class="toman-amt"><img src="toman.png" alt="تومان"><span>${fmt(s.price)}</span></span>
+          <span class="toman-amt"><img src="toman.png" alt="تومان"><span>${escapeHTML(fmt(s.price))}</span></span>
         </div>
       `;
       // No sub-page exists yet for individual vehicles — reserved for later.
