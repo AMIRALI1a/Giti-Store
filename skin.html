@@ -411,6 +411,20 @@
 
   function fmt(n){ return n.toLocaleString("en-US"); }
 
+  function escapeHTML(value){
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  }
+
+  function safeImageURL(value){
+    if (typeof value !== "string" || !value.trim()) return "";
+    try {
+      const url = new URL(value, window.location.origin);
+      if (url.protocol !== "https:" && url.origin !== window.location.origin) return "";
+      if (url.protocol !== "https:" && url.protocol !== "http:") return "";
+      return url.href;
+    } catch (_) { return ""; }
+  }
+
   function render(list){
     grid.innerHTML = "";
     list.forEach((s, i) => {
@@ -419,13 +433,14 @@
       card.setAttribute("tabindex", "0");
       card.setAttribute("role", "button");
       card.style.animationDelay = (i * 0.04) + "s";
+      const imageURL = safeImageURL(s.image);
       card.innerHTML = `
         <div class="card-image">
-          ${s.image ? `<img src="${s.image}" alt="">` : `<span class="id-num">#${s.id}</span><span class="id-tag">SKIN ID</span>`}
+          ${imageURL ? `<img src="${escapeHTML(imageURL)}" alt="" loading="lazy" decoding="async">` : `<span class="id-num">#${escapeHTML(s.id)}</span><span class="id-tag">SKIN ID</span>`}
         </div>
         <div class="card-info">
-          <div class="card-title">Skin ID ${s.id}</div>
-          <div class="price"><span class="toman-amt"><img src="toman.png" alt="تومان"><span>${fmt(s.price)}</span></span></div>
+          <div class="card-title">Skin ID ${escapeHTML(s.id)}</div>
+          <div class="price"><span class="toman-amt"><img src="toman.png" alt="تومان"><span>${escapeHTML(fmt(s.price))}</span></span></div>
         </div>
       `;
       // No sub-page exists yet for individual skins — reserved for later.
