@@ -440,7 +440,7 @@
         </div>
         <div class="card-info">
           <div class="card-title">Skin ID ${escapeHTML(s.id)}</div>
-          <div class="price"><span class="toman-amt"><img src="toman.png" alt="تومان"><span>${fmt(s.price)}</span></span></div>
+          <div class="price"><span class="toman-amt"><img src="toman.png" alt="تومان"><span>${escapeHTML(fmt(s.price))}</span></span></div>
         </div>
       `;
       // No sub-page exists yet for individual skins — reserved for later.
