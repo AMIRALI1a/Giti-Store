@@ -36,26 +36,47 @@ body{
   padding: 0 16px 40px;
 }
 
-/* top bar — fixed, identical size/behavior to the main site's hamburger (always visible, no shrink/hide dance) */
+/* Header — exact final sizing/placement from index-test-4 (logo/shop omitted) */
+.topbar{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  height:48px;
+  min-height:48px;
+  padding:0;
+}
 .hamburger-btn{
-  position: fixed;
-  top: 16px; right: 18px;
-  z-index: 90;
-  width: 44px; height: 44px;
-  background: none;
-  border: none;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
+  position:fixed;
+  top:2px;
+  right:3px;
+  left:auto;
+  z-index:90;
+  width:44px;
+  height:44px;
+  background:none;
+  border:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
   cursor:pointer;
 }
 .hb-bar{
-  width: 22px; height: 2px; border-radius: 2px;
-  background: var(--cream);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  width:17px;
+  height:1.5px;
+  border-radius:1px;
+  background:var(--cream);
+  transition:transform .3s ease, opacity .3s ease;
 }
-.hamburger-btn.open .hb-bar:nth-child(1){ transform: translateY(7px) rotate(45deg); }
-.hamburger-btn.open .hb-bar:nth-child(2){ opacity: 0; }
-.hamburger-btn.open .hb-bar:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
-.hamburger-btn:active{ opacity: 0.7; }
+/* Two-line hamburger morphs into the same compact X as index-test-4 */
+.hamburger-btn.open .hb-bar:nth-child(1){transform:translateY(3.75px) rotate(45deg)}
+.hamburger-btn.open .hb-bar:nth-child(2){opacity:1;transform:translateY(-3.75px) rotate(-45deg)}
+.hamburger-btn:active{opacity:.7}
+@media (min-width:769px){
+  .hamburger-btn{top:2px;right:19px;width:44px;height:44px}
+}
 
 /* hero */
 .hero{
@@ -302,13 +323,124 @@ h1{
 }
 .order-row .order-top{ display: flex; justify-content: space-between; font-size: 13px; color: var(--cream); font-weight: 600; }
 .order-row .order-date{ font-size: 11px; color: var(--dim); }
+
+/* Menu drawer — same desktop width and clean edge as index-test-4 */
+.menu-sheet,.reader-menu-sheet{border-left:0}
+@media (min-width:769px){
+  .menu-sheet{
+    width:min(430px,90vw);
+    max-width:430px;
+    right:0;
+    left:auto;
+    border-radius:0;
+  }
+}
+
+/* --- Main-site style footer (store shortcut intentionally omitted) --- */
+.g-footer{
+  width:min(100%,1200px);
+  margin:72px auto 0;
+  padding:40px 4px 30px;
+  border-top:1px solid var(--panel-line);
+  text-align:right;
+}
+.g-f-main{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.g-f-main a,.g-f-main button{
+  font-family:'Vazirmatn',sans-serif;
+  font-size:clamp(22px,5.6vw,30px);
+  font-weight:800;line-height:1.7;color:var(--cream);
+  text-decoration:none;background:none;border:0;padding:3px 0;
+  cursor:pointer;text-align:right;transition:color .2s,transform .25s;
+}
+.g-f-main a:hover,.g-f-main button:hover,
+.g-f-main a:focus-visible,.g-f-main button:focus-visible{
+  color:var(--gold);transform:translateX(-5px);outline:0;
+}
+.g-f-social{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.g-footer .social-btn{
+  width:auto;height:auto;padding:6px;border:0;border-radius:10px;background:none;
+}
+.g-footer .social-btn img{
+  width:25px;height:25px;opacity:.85;transition:opacity .2s,transform .25s;
+}
+.g-footer .social-btn:hover img,.g-footer .social-btn:focus-visible img{
+  opacity:1;transform:translateY(-2px);
+}
+.g-f-legal{display:flex;flex-direction:column;align-items:flex-start;margin-top:30px}
+.g-f-legal>a{
+  font-size:15px;line-height:2.3;color:var(--dim);
+  text-decoration:none;transition:color .2s;
+}
+.g-f-legal>a:hover,.g-f-legal>a:focus-visible{color:var(--cream);outline:0}
+.g-f-copy{margin-top:26px;font-size:12px;letter-spacing:.5px;color:var(--dim);opacity:.55}
+.g-footer .enamad-badge{justify-content:flex-start;margin-top:18px}
+.g-footer .enamad-badge img{width:76px}
+
+/* --- Responsive store layout --- */
+@media (min-width:700px){
+  .wrap{max-width:1120px;padding:0 42px 64px}
+  .hero{padding-top:42px}
+  .logo{width:172px}
+  .store-tag{font-size:14px;margin-top:18px}
+  h1{font-size:clamp(28px,3vw,38px);margin-top:10px}
+  .tagline{font-size:15px;max-width:620px;margin:12px auto 0}
+  .prompt{font-size:14px;margin-top:22px}
+  .rule{margin:28px 0 30px}
+  .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .item{padding:22px 24px;border-radius:16px;min-height:166px}
+  .item-title{font-size:21px}
+  .item-desc{font-size:13px}
+  .footer,.g-footer{margin-top:76px}
+}
+@media (min-width:1100px){
+  .wrap{max-width:1240px;padding-left:56px;padding-right:56px}
+  .list{gap:20px}
+  .item{min-height:176px;padding:25px 28px}
+  .item-desc{max-width:480px;line-height:2}
+  .g-footer{padding-top:52px}
+  .g-f-main a,.g-f-main button{font-size:30px}
+}
+@media (min-width:820px){
+  .g-footer{display:grid;grid-template-columns:1.1fr 1fr;gap:0 60px}
+  .g-f-main{grid-row:1 / span 2}
+  .g-f-social{margin-top:6px}
+  .g-f-legal{margin-top:18px}
+  .g-f-copy{grid-column:1 / -1;margin-top:44px}
+}
+@media (max-width:699px){
+  .wrap{padding-top:0}
+  .hero{padding-top:24px}
+  .g-footer{margin-top:48px;padding-top:30px}
+}
+
+
+/* The 48px glass strip appears only after scrolling — exact index-test-4 behavior */
+.topbar::before{
+  content:"";
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:48px;
+  z-index:50;
+  pointer-events:none;
+  background:rgba(18,18,36,.72);
+  -webkit-backdrop-filter:blur(18px) saturate(1.5);
+  backdrop-filter:blur(18px) saturate(1.5);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+html.hb-scrolled .topbar::before{opacity:1}
+
 </style>
 </head>
 <body>
 
-<button class="hamburger-btn" id="heroHamburger">
-  <span class="hb-bar"></span><span class="hb-bar"></span><span class="hb-bar"></span>
-</button>
+<div class="topbar">
+  <button class="hamburger-btn" id="heroHamburger" aria-label="باز کردن منو" aria-expanded="false">
+    <span class="hb-bar"></span><span class="hb-bar"></span>
+  </button>
+</div>
 
 <div class="wrap">
   <div class="hero">
@@ -380,18 +512,29 @@ h1{
     </a>
   </div>
 
-  <div class="footer">
-    <div class="footer-row">
-      <a class="social-btn" data-social="telegram" href="#"><img loading="lazy" decoding="async" src="icon-telegram.png" alt="Telegram"></a>
-      <a class="social-btn" data-social="instagram" href="#"><img loading="lazy" decoding="async" src="icon-instagram.png" alt="Instagram"></a>
-      <a class="social-btn" data-social="youtube" href="#"><img loading="lazy" decoding="async" src="icon-youtube.png" alt="YouTube"></a>
-      <a class="social-btn" data-social="discord" href="#"><img loading="lazy" decoding="async" src="icon-discord.png" alt="Discord"></a>
+  <footer class="g-footer">
+    <nav class="g-f-main" aria-label="پیوندهای اصلی">
+      <a href="mailto:info@gitirp.ir">ارتباط با ما</a>
+      <a href="https://gitirp.ir/about.html">درباره ما</a>
+      <a href="mailto:info@gitirp.ir?subject=پشتیبانی">پشتیبانی</a>
+    </nav>
+    <div class="g-f-social" aria-label="شبکه‌های اجتماعی">
+      <a class="social-btn" data-social="telegram" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="icon-telegram.png" alt="Telegram"></a>
+      <a class="social-btn" data-social="instagram" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="icon-instagram.png" alt="Instagram"></a>
+      <a class="social-btn" data-social="youtube" href="#" aria-label="YouTube"><img loading="lazy" decoding="async" src="icon-youtube.png" alt="YouTube"></a>
+      <a class="social-btn" data-social="discord" href="#" aria-label="Discord"><img loading="lazy" decoding="async" src="icon-discord.png" alt="Discord"></a>
     </div>
-    <div class="enamad-badge">
-<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=7269555&Code=RnvalKv2yIuAWXG816Mct9c7wpxuP1vj'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=7269555&Code=RnvalKv2yIuAWXG816Mct9c7wpxuP1vj' alt='' style='cursor:pointer' code='RnvalKv2yIuAWXG816Mct9c7wpxuP1vj'></a>
-    </div>
-    <div class="footer-tag">GITI ROLE PLAY</div>
-  </div>
+    <nav class="g-f-legal" aria-label="پیوندهای حقوقی">
+      <a href="https://gitirp.ir/privacy.html">حریم خصوصی</a>
+      <a href="https://gitirp.ir/terms.html">شرایط استفاده</a>
+      <a href="mailto:info@gitirp.ir" dir="ltr">info@gitirp.ir</a>
+      <div class="enamad-badge">
+        <a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=7269555&Code=RnvalKv2yIuAWXG816Mct9c7wpxuP1vj"><img referrerpolicy="origin" src="https://trustseal.enamad.ir/logo.aspx?id=7269555&Code=RnvalKv2yIuAWXG816Mct9c7wpxuP1vj" alt="نماد اعتماد" style="cursor:pointer" code="RnvalKv2yIuAWXG816Mct9c7wpxuP1vj"></a>
+      </div>
+    </nav>
+    <div class="g-f-copy">© <span id="gYear"></span> GITI ROLE PLAY</div>
+  </footer>
+  <script>try{document.getElementById("gYear").textContent=new Date().toLocaleDateString("fa-IR-u-ca-persian",{year:"numeric"})}catch(e){}</script>
 </div>
 
 <div class="menu-backdrop" id="menuBackdrop"></div>
@@ -465,6 +608,20 @@ const menuSheet = document.getElementById("menuSheet");
 const menuViews = document.querySelectorAll(".menu-view");
 const heroHamburger = document.getElementById("heroHamburger");
 
+(function(){
+  const root = document.documentElement;
+  let active = false;
+  function syncHeaderGlass(){
+    const scrolled = (window.pageYOffset || 0) > 8;
+    if (scrolled !== active){
+      active = scrolled;
+      root.classList.toggle("hb-scrolled", scrolled);
+    }
+  }
+  window.addEventListener("scroll", syncHeaderGlass, {passive:true});
+  syncHeaderGlass();
+})();
+
 function showMenuView(name){
   menuViews.forEach(v => { v.hidden = (v.getAttribute("data-view") !== name); });
 }
@@ -473,12 +630,14 @@ function openMenu(){
   menuBackdrop.classList.add("show");
   menuSheet.classList.add("show");
   heroHamburger.classList.add("open");
+  heroHamburger.setAttribute("aria-expanded", "true");
   document.body.style.overflow = "hidden";
 }
 function closeMenu(){
   menuBackdrop.classList.remove("show");
   menuSheet.classList.remove("show");
   heroHamburger.classList.remove("open");
+  heroHamburger.setAttribute("aria-expanded", "false");
   document.body.style.overflow = "";
 }
 heroHamburger.addEventListener("click", () => {
