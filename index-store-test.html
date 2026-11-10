@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>GITI ROLE PLAY | STORE</title>
+<script>
+  // A shared package link (#pack-ID): flag it before first paint so the store never flashes.
+  if (/^#pack-/.test(location.hash)) document.documentElement.classList.add('direct');
+</script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-top:#1E1E36;--bg-bottom:#0F1120;--panel:#262646;--panel-2:#1b1b34;--gold:#FFD4A9;--ink:#1E1E36;--cream:#fff;--dim:#a9a9cc;
+  --shadow:0 10px 28px rgba(0,0,0,.32);--latin:'Plus Jakarta Sans','Vazirmatn',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg-bottom);color:var(--cream);font-family:'Vazirmatn',sans-serif;min-height:100vh}
+body{background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));background-attachment:fixed}
+img{display:block}button{font-family:inherit}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px 40px}
+
+/* header */
+.topbar::before{content:"";position:fixed;top:0;left:0;right:0;height:calc(48px + env(safe-area-inset-top,0px));z-index:50;pointer-events:none;
+  background:rgba(18,18,36,.72);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);opacity:0;transition:opacity .25s}
+html.hb-scrolled .topbar::before{opacity:1}
+.top-logo{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;z-index:60;height:24px;display:flex;align-items:center;color:var(--cream);text-decoration:none;font-family:var(--latin);font-weight:800;letter-spacing:2px;font-size:15px}
+.top-logo img{height:100%;width:auto}
+.hamburger-btn,.s-ham{width:44px;height:44px;background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.hamburger-btn{position:fixed;top:calc(2px + env(safe-area-inset-top,0px));right:3px;z-index:90;transition:opacity .2s}
+.hb-bar{width:17px;height:1.5px;border-radius:1px;background:var(--cream);transition:transform .3s ease}
+.open>.hb-bar:nth-child(1){transform:translateY(3.75px) rotate(45deg)}
+.open>.hb-bar:nth-child(2){transform:translateY(-3.75px) rotate(-45deg)}
+html.sheet-open .hamburger-btn,html.sheet-open .top-logo{opacity:0;pointer-events:none}
+
+/* hero */
+.hero{padding-top:calc(76px + env(safe-area-inset-top,0px));text-align:center}
+.store-tag{font-family:var(--latin);font-weight:700;letter-spacing:3px;font-size:11px;color:var(--dim)}
+h1{font-weight:800;font-size:24px;margin-top:8px}
+.tagline{color:var(--dim);font-size:13px;line-height:1.9;margin-top:8px}
+
+/* packages: every card has the same size */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:34px 0 12px}
+.sec-title{font-size:19px;font-weight:800}.sec-sub{font-size:12px;color:var(--dim)}
+.packs[hidden]{display:none}
+.track{display:flex;align-items:stretch;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -16px;padding:8px 16px 20px;scroll-padding:0 16px}
+.track::-webkit-scrollbar{display:none}
+.pack{position:relative;flex:0 0 72%;max-width:290px;scroll-snap-align:center;border-radius:24px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;text-align:right;
+  background:linear-gradient(160deg,var(--panel),var(--panel-2));box-shadow:var(--shadow);transition:transform .2s}
+.pack:active{transform:scale(.98)}
+.pack.featured{box-shadow:var(--shadow),0 0 0 1px rgba(255,212,169,.4),0 0 26px rgba(255,212,169,.18)}
+.pack-img{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#34345c,#1b1b34);overflow:hidden;flex-shrink:0}
+.pack-img img{width:100%;height:100%;object-fit:cover}
+.pack-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(15,17,32,.5));pointer-events:none}
+.pack-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-weight:800;font-size:40px;letter-spacing:2px;color:rgba(255,255,255,.12)}
+.badge{position:absolute;top:10px;right:10px;z-index:2;background:var(--gold);color:var(--ink);font-size:11px;font-weight:800;padding:3px 11px;border-radius:99px}
+.timer{position:absolute;top:10px;left:10px;z-index:2;font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(15,17,32,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pack-body{padding:13px 15px 15px;display:flex;flex-direction:column;flex:1}
+.pack-title{font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pack-desc{font-size:12px;color:var(--dim);line-height:1.8;margin-top:3px;min-height:43px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pack-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:10px}
+.price{display:inline-flex;align-items:center;gap:5px;font-family:var(--latin);font-weight:700;font-size:15px;direction:ltr}
+.price img{width:14px;height:14px}.price small{font-family:'Vazirmatn';font-size:11px;color:var(--dim)}
+.pill{background:var(--gold);color:var(--ink);border:0;border-radius:99px;font-weight:700;font-size:12.5px;padding:7px 18px;cursor:pointer}
+.pill.off{background:rgba(255,255,255,.12);color:var(--dim);pointer-events:none}
+.pack.sold .pack-img{filter:grayscale(.7) brightness(.7)}
+.dots{display:flex;justify-content:center;gap:7px;margin-top:-6px}
+.dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.25);border:0;padding:0;transition:width .25s,background .25s}
+.dot.on{width:20px;background:var(--cream)}
+
+/* sections */
+.list{display:flex;flex-direction:column;gap:12px}
+.item{display:block;border-radius:22px;padding:20px 20px 18px;text-decoration:none;color:inherit;background:linear-gradient(160deg,var(--panel),var(--panel-2));box-shadow:var(--shadow);transition:transform .15s}
+.item:active{transform:scale(.98)}
+.item-title{font-family:var(--latin);font-weight:800;font-size:18px;letter-spacing:.5px;direction:ltr;text-align:right}
+.item-desc{font-size:12.5px;color:var(--dim);line-height:1.8;margin-top:6px}
+.item-cta{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;margin-top:12px}
+.item-cta .arrow{display:inline-block;transform:rotate(180deg);opacity:.7}
+.item.soon{opacity:.5;pointer-events:none;box-shadow:none}
+.soon-badge{font-family:var(--latin);font-weight:700;font-size:10px;letter-spacing:2px;color:var(--dim);background:rgba(255,255,255,.1);padding:3px 10px;border-radius:99px;direction:ltr;display:inline-block}
+
+/* footer */
+.g-footer{margin:64px 0 0;padding:8px 4px 30px;text-align:right}
+.g-f-main{display:flex;flex-direction:column;align-items:flex-start}
+.g-f-main a{font-size:clamp(22px,5.6vw,30px);font-weight:800;line-height:1.7;color:var(--cream);text-decoration:none;padding:3px 0;transition:color .2s}
+.g-f-main a:hover{color:var(--gold)}
+.g-f-social{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.social-btn{padding:6px;display:block}
+.social-btn img{width:25px;height:25px;opacity:.85;transition:opacity .2s,transform .25s}
+.social-btn:hover img{opacity:1;transform:translateY(-2px)}
+.g-f-legal{display:flex;flex-direction:column;align-items:flex-start;margin-top:26px}
+.g-f-legal>a{font-size:15px;line-height:2.3;color:var(--dim);text-decoration:none}
+.enamad-badge{margin-top:16px}.enamad-badge img{width:76px;height:auto}
+.g-f-copy{margin-top:24px;font-size:12px;letter-spacing:.5px;color:var(--dim);opacity:.55}
+
+/* menu */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
+.backdrop.show{opacity:1;pointer-events:auto}
+.menu-sheet{position:fixed;top:0;right:0;bottom:0;width:min(300px,82vw);background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));z-index:80;transform:translateX(100%);visibility:hidden;
+  transition:transform .32s cubic-bezier(.2,.8,.25,1),visibility 0s linear .32s;overflow-y:auto;padding:70px 20px 24px}
+.menu-sheet.show{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.2,.8,.25,1),visibility 0s}
+.menu-body{display:flex;flex-direction:column}
+.menu-item{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:13px 0;color:var(--cream);font-size:19px;font-weight:800;cursor:pointer;text-align:right;text-decoration:none}
+.menu-item .chev{margin-inline-start:auto;color:var(--dim);transform:rotate(180deg)}
+.only-direct{display:none}
+.menu-view[hidden]{display:none}
+.menu-back{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0 0 18px;color:var(--dim);font-size:13px;cursor:pointer}
+.empty-state{text-align:center;color:var(--dim);font-size:13px;padding:44px 20px}
+
+/* package sheet (same behaviour as the article reader) */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:100;max-width:560px;margin:0 auto;max-height:90vh;display:flex;flex-direction:column;visibility:hidden;
+  background:linear-gradient(180deg,#25254a,#171730);border-radius:28px 28px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);
+  transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.8,.25,1),visibility 0s linear .35s}
+.sheet.show{transform:none;visibility:visible;transition:transform .35s cubic-bezier(.2,.8,.25,1),visibility 0s}
+.sheet.drag{transition:none}
+.s-head{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:18px 12px 4px;touch-action:none}
+.s-head::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:38px;height:4px;border-radius:99px;background:rgba(255,255,255,.28)}
+.s-btn{width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:var(--cream);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.s-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.s-ham{display:none;width:38px;height:38px}
+.sheet-body{overflow-y:auto;overscroll-behavior:contain;padding:8px 20px calc(110px + env(safe-area-inset-bottom,0px))}
+.s-img{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:16/10;background:linear-gradient(135deg,#34345c,#1b1b34);cursor:zoom-in}
+.s-img img{width:100%;height:100%;object-fit:cover}
+.zoom-hint{position:absolute;bottom:10px;left:10px;width:30px;height:30px;border-radius:50%;background:rgba(15,17,32,.6);display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.zoom-hint svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.s-title{font-size:21px;font-weight:800;margin-top:16px}
+.s-note{display:inline-block;margin:8px 14px 0 0;font-size:12px;font-weight:600;color:var(--gold)}
+.s-desc{font-size:13.5px;color:var(--dim);line-height:2;margin-top:8px}
+.s-h{font-size:13px;font-weight:700;margin:22px 0 4px}
+.s-items{list-style:none}
+.s-items li{display:flex;align-items:center;gap:12px;padding:11px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.s-items li:last-child{border:0}
+.s-items .thumb{width:54px;height:54px;border-radius:14px;border:0;padding:4px;flex-shrink:0;background:rgba(255,255,255,.06);cursor:zoom-in}
+.s-items .thumb img{width:100%;height:100%;object-fit:contain}
+.s-items .nm{flex:1}
+.s-items .q{color:var(--dim);font-family:var(--latin);font-weight:600;direction:ltr}
+.s-bar{position:absolute;left:0;right:0;bottom:0;padding:14px 20px calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:rgba(23,23,48,.86);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.s-bar:empty{display:none}
+.s-bar .price{font-size:17px}.s-bar .pill{font-size:14px;padding:11px 34px}
+.spin{width:28px;height:28px;border:3px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;margin:90px auto;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.gone{text-align:center;padding:70px 10px;color:var(--dim);font-size:14px;line-height:2}
+.gone .pill{margin-top:18px;font-size:14px;padding:10px 28px}
+
+/* picture viewer (like the article's) */
+.lb{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(6,6,14,.94);opacity:0;pointer-events:none;transition:opacity .25s}
+.lb.on{opacity:1;pointer-events:auto}
+.lb img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:10px;transform:scale(.96);transition:transform .32s cubic-bezier(.2,.8,.25,1);cursor:zoom-out}
+.lb.on img{transform:none}
+.lb button{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:20px;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:calc(30px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);z-index:400;background:rgba(255,255,255,.95);color:var(--ink);font-size:13px;font-weight:700;padding:10px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* desktop */
+@media (min-width:700px){
+  .wrap{max-width:1120px;padding:0 42px 64px}.top-logo{left:42px}.hamburger-btn{right:19px}
+  .hero{padding-top:110px}h1{font-size:clamp(30px,3vw,40px)}.tagline{font-size:15px;max-width:620px;margin:12px auto 0}
+  .track{margin:0 -42px;padding:8px 42px 20px;scroll-padding:0 42px}.pack{flex-basis:310px;max-width:310px}
+  .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.item{padding:26px 28px;min-height:150px}
+  .menu-sheet{width:min(430px,90vw)}
+  .sheet{bottom:50%;transform:translateY(50%) scale(.96);opacity:0;border-radius:28px;max-height:84vh;transition:opacity .25s,transform .3s,visibility 0s linear .3s}
+  .sheet.show{transform:translateY(50%);opacity:1;transition:opacity .25s,transform .3s,visibility 0s}
+}
+/* direct link: full page, menu button instead of X */
+html.direct .wrap,html.direct .topbar{visibility:hidden}
+html.direct .sheet{bottom:0;top:0;max-width:none;max-height:none;height:100%;border-radius:0;box-shadow:none;opacity:1;transform:none;visibility:visible;transition:none}
+html.direct .s-x{display:none}html.direct .s-ham{display:flex}html.direct .s-head::before{display:none}
+html.direct .only-direct{display:flex}
+html.direct .backdrop{z-index:120}html.direct .menu-sheet{z-index:130}
+html.direct .sheet-body{max-width:560px;width:100%;margin:0 auto}
+html.direct .s-bar{justify-content:center}html.direct .s-bar>*{max-width:560px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="top-logo" href="https://gitirp.ir" aria-label="Giti"><img src="https://store.gitirp.ir/logo.png" alt="" onerror="this.parentNode.textContent='GITI'"></a>
+  <button class="hamburger-btn" id="hb" aria-label="منو" aria-expanded="false"><span class="hb-bar"></span><span class="hb-bar"></span></button>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="store-tag">SERVER STORE</div>
+    <h1>فروشگاه رسمی سرور</h1>
+    <p class="tagline">آیتم‌های اختصاصی، وسایل نقلیه، املاک و امکانات ویژه<br>برای بازیکنانی که تجربه‌ی متفاوتی می‌خوان.</p>
+  </div>
+
+  <section class="packs" id="packs" hidden>
+    <div class="sec-head"><h2 class="sec-title">پکیج‌های ویژه</h2><span class="sec-sub">محدود و اختصاصی</span></div>
+    <div class="track" id="track"></div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <div class="sec-head"><h2 class="sec-title">بخش‌های فروشگاه</h2></div>
+  <div class="list">
+    <a class="item" href="#" data-target="skin"><div class="item-title">VIP SKIN</div><div class="item-desc">اسکین‌های اختصاصی با طراحی جدا از حالت پیش‌فرض بازی.</div><div class="item-cta">مشاهده اسکین‌ها <span class="arrow">‹</span></div></a>
+    <a class="item" href="#" data-target="vehicle"><div class="item-title">VIP VEHICLE</div><div class="item-desc">وسایل نقلیه پریمیوم با مشخصات و ظاهر ویژه، خارج از لیست معمولی سرور.</div><div class="item-cta">مشاهده ماشین‌ها <span class="arrow">‹</span></div></a>
+    <a class="item soon" href="#" data-target="house"><div class="item-title">VIP HOUSE</div><div class="item-desc">املاک اختصاصی سرور با موقعیت و امکانات بهتر.</div><div class="item-cta"><span class="soon-badge">SOON</span></div></a>
+    <a class="item" href="#" data-target="money"><div class="item-title">MONEY</div><div class="item-desc">شارژ پول داخل بازی، سریع و بدون تاخیر.</div><div class="item-cta">شارژ همین حالا <span class="arrow">‹</span></div></a>
+    <a class="item soon" href="#" data-target="luckybox"><div class="item-title">LUCKY BOX</div><div class="item-desc">جعبه‌های شانسی با احتمال دریافت آیتم‌های کمیاب.</div><div class="item-cta"><span class="soon-badge">SOON</span></div></a>
+    <a class="item" href="#" data-target="donate"><div class="item-title">DONATE</div><div class="item-desc">سکه‌های ویژه و تاثیرگذار بر قابلیت‌های شخصی.</div><div class="item-cta">مشاهده سکه‌ها <span class="arrow">‹</span></div></a>
+  </div>
+
+  <footer class="g-footer">
+    <nav class="g-f-main" aria-label="پیوندهای اصلی">
+      <a href="mailto:info@gitirp.ir">ارتباط با ما</a>
+      <a href="https://gitirp.ir/about.html">درباره ما</a>
+      <a href="mailto:info@gitirp.ir?subject=پشتیبانی">پشتیبانی</a>
+    </nav>
+    <div class="g-f-social">
+      <a class="social-btn" data-social="telegram" href="#" aria-label="Telegram"><img loading="lazy" decoding="async" src="https://store.gitirp.ir/icon-telegram.png" alt="Telegram"></a>
+      <a class="social-btn" data-social="instagram" href="#" aria-label="Instagram"><img loading="lazy" decoding="async" src="https://store.gitirp.ir/icon-instagram.png" alt="Instagram"></a>
+      <a class="social-btn" data-social="youtube" href="#" aria-label="YouTube"><img loading="lazy" decoding="async" src="https://store.gitirp.ir/icon-youtube.png" alt="YouTube"></a>
+      <a class="social-btn" data-social="discord" href="#" aria-label="Discord"><img loading="lazy" decoding="async" src="https://store.gitirp.ir/icon-discord.png" alt="Discord"></a>
+    </div>
+    <nav class="g-f-legal">
+      <a href="https://gitirp.ir/privacy.html">حریم خصوصی</a>
+      <a href="https://gitirp.ir/terms.html">شرایط استفاده</a>
+      <a href="mailto:info@gitirp.ir" dir="ltr">info@gitirp.ir</a>
+      <div class="enamad-badge"><a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=7269555&Code=RnvalKv2yIuAWXG816Mct9c7wpxuP1vj"><img referrerpolicy="origin" src="https://trustseal.enamad.ir/logo.aspx?id=7269555&Code=RnvalKv2yIuAWXG816Mct9c7wpxuP1vj" alt="enamad"></a></div>
+    </nav>
+    <div class="g-f-copy">© <span id="gYear"></span> GITI ROLE PLAY</div>
+  </footer>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+
+<div class="menu-sheet" id="menuSheet">
+  <div class="menu-view" data-view="main"><div class="menu-body">
+    <button class="menu-item only-direct" id="menuStore"><span>فروشگاه</span></button>
+    <a class="menu-item" href="https://gitirp.ir"><span>خانه</span></a>
+    <button class="menu-item" data-goto="history"><span>سفارشات</span><span class="chev">‹</span></button>
+    <a class="menu-item" href="https://gitirp.ir/admin.html"><span>ورود مدیران</span></a>
+  </div></div>
+  <div class="menu-view" data-view="history" hidden>
+    <button class="menu-back" data-back="main">› برگشت</button>
+    <div class="empty-state">تاریخچه شما خالی است</div>
+  </div>
+</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="جزئیات پکیج">
+  <div class="s-head" id="sHead">
+    <button class="s-btn s-x" id="sX" aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="s-ham" id="sHam" aria-label="منو"><span class="hb-bar"></span><span class="hb-bar"></span></button>
+    <button class="s-btn" id="sShare" aria-label="اشتراک‌گذاری"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 002 2h10a2 2 0 002-2v-6"/></svg></button>
+  </div>
+  <div class="sheet-body" id="sheetBody"><div class="spin"></div></div>
+  <div class="s-bar" id="sheetBar"></div>
+</div>
+
+<div class="lb" id="lb"><button id="lbX" aria-label="بستن">✕</button><img id="lbImg" alt=""></div>
+<div class="toast" id="toast">لینک کپی شد</div>
+
+<script>
+let tg=null;
+if(window.Telegram&&window.Telegram.WebApp){tg=window.Telegram.WebApp;tg.ready();tg.expand();if(tg.disableVerticalSwipes)tg.disableVerticalSwipes();if(tg.BackButton)tg.BackButton.hide();}
+const $=id=>document.getElementById(id),root=document.documentElement;
+const openUrl=u=>{if(tg){u.indexOf("t.me/")>-1?tg.openTelegramLink(u):tg.openLink(u)}else window.open(u,"_blank")};
+try{$("gYear").textContent=new Date().toLocaleDateString("fa-IR-u-ca-persian",{year:"numeric"})}catch(e){}
+const socialLinks={telegram:"https://t.me/GitiRolePlay",instagram:"https://www.instagram.com/gitirpofficial?igsh=YW43NWh0YmZlbTZu",youtube:"https://youtube.com/@gitirp?si=hdAkUo8BNQbCBGmJ",discord:"https://discord.gg/BP2UtCbPe"};
+document.querySelectorAll(".social-btn").forEach(el=>{const k=el.dataset.social;if(socialLinks[k])el.href=socialLinks[k];
+  el.addEventListener("click",e=>{e.preventDefault();const u=el.getAttribute("href");if(u&&u!=="#")openUrl(u)})});
+(function(){let a=false;const f=()=>{const s=(window.pageYOffset||0)>8;if(s!==a){a=s;root.classList.toggle("hb-scrolled",s)}};addEventListener("scroll",f,{passive:true});f()})();
+
+let locks=0;const lock=on=>{locks+=on?1:-1;document.body.style.overflow=locks>0?"hidden":""};
+const isDirect=()=>root.classList.contains("direct");
+const hPush=(st,u)=>{try{history.pushState(st,"",u)}catch(e){}},hRep=(st,u)=>{try{history.replaceState(st,"",u)}catch(e){}};
+const toast=t=>{const e=$("toast");if(t)e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1800)};
+
+/* menu */
+const hb=$("hb"),sHam=$("sHam"),menuSheet=$("menuSheet"),backdrop=$("backdrop"),sheetEl=$("sheet");
+const views=document.querySelectorAll(".menu-view"),showView=n=>views.forEach(v=>v.hidden=v.dataset.view!==n);
+const sheetDims=()=>sheetEl.classList.contains("show")&&!isDirect();
+function setBtns(o){hb.classList.toggle("open",o);sHam.classList.toggle("open",o);hb.setAttribute("aria-expanded",o)}
+function openMenu(){showView("main");menuSheet.classList.add("show");backdrop.classList.add("show");setBtns(true);lock(true)}
+function closeMenu(){if(!menuSheet.classList.contains("show"))return;menuSheet.classList.remove("show");if(!sheetDims())backdrop.classList.remove("show");setBtns(false);lock(false)}
+const toggleMenu=()=>menuSheet.classList.contains("show")?closeMenu():openMenu();
+hb.addEventListener("click",toggleMenu);sHam.addEventListener("click",toggleMenu);
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.goto)));
+document.querySelectorAll("[data-back]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.back)));
+$("menuStore").addEventListener("click",()=>{closeMenu();hardClose()});
+
+const routes={skin:"skin.html",vehicle:"vehicle.html",house:"https://t.me/yourbot/house",money:"money.html",luckybox:"https://t.me/yourbot/luckybox",donate:"donate.html"};
+document.querySelectorAll(".item").forEach(el=>el.addEventListener("click",e=>{e.preventDefault();const u=routes[el.dataset.target];if(!u)return;u.startsWith("http")?openUrl(u):(location.href=u)}));
+
+/* ================= SPECIAL PACKAGES =================
+   Real data: GET https://api.gitirp.ir/api/packages (packages made in the admin panel).
+   Sample packages are shown ONLY when the address ends with ?demo (for design checks). */
+const DEMO=/[?&]demo(=|&|$)/.test(location.search);
+const BUY_URL=id=>"https://t.me/yourbot?start=buy_package_"+id; // placeholder, same as other pages
+const H=36e5,D=24*H,now=()=>Date.now();
+const svgImg=(t,a,b)=>"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/><text x="400" y="275" font-family="sans-serif" font-size="64" font-weight="800" fill="#fff" fill-opacity=".85" text-anchor="middle">${t}</text></svg>`);
+const demoPacks=()=>[
+  {id:"demo1",title:"پکیج سلطنتی",desc:"بزرگ‌ترین پکیج گیتی؛ همه‌چیز برای شروعی متفاوت با یک خرید.",price:1500000,badge:"پرفروش",featured:1,end:now()+2*D+5*H,image:svgImg("ROYAL PACK","#5b4b8a","#1b1b34"),
+    items:[{name:"اسکین اختصاصی",qty:"#12",image:svgImg("SKIN 12","#7a4b6e","#2b1b34")},{name:"ماشین VIP",qty:"#305",image:svgImg("CAR 305","#2f5b7a","#101c2b")},{name:"پول داخل بازی",qty:"5,000,000"},{name:"سکه",qty:"20"}]},
+  {id:"demo2",title:"پکیج شروع",desc:"برای بازیکن‌های تازه‌وارد، با قیمتی مناسب.",price:450000,badge:"جدید",image:svgImg("START PACK","#3b6b5b","#14221e"),items:[{name:"اسکین",qty:"#7",image:svgImg("SKIN 7","#6b5b3b","#221e14")},{name:"پول داخل بازی",qty:"2,000,000"}]},
+  {id:"demo3",title:"پکیج آخر هفته",desc:"فقط تا پایان این زمان قابل خرید است.",price:780000,badge:"محدود",end:now()+9*H,stock:10,sold:7,image:svgImg("WEEKEND","#8a4b4b","#2a1414"),items:[{name:"ماشین VIP",qty:"#88",image:svgImg("CAR 88","#4b4b8a","#14142a")},{name:"سکه",qty:"10"}]}
+];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeImg=v=>{if(!v)return"";if(/^data:image\/(png|jpe?g|webp|gif|svg\+xml)[;,]/i.test(v))return v;try{const u=new URL(v,location.origin);return(u.protocol==="https:"||u.origin===location.origin)?u.href:""}catch(e){return""}};
+const fa=n=>Number(n).toLocaleString("fa-IR");
+const priceHTML=p=>`<span class="price"><img src="https://store.gitirp.ir/toman.png" alt="" onerror="this.outerHTML='<small>تومان</small>'"><span>${Number(p).toLocaleString("en-US")}</span></span>`;
+function normalize(p){
+  let items=p.items;if(typeof items==="string"){try{items=JSON.parse(items)}catch(e){items=[]}}
+  const t=v=>v?(Number(v)||new Date(v).getTime()||0):0;
+  return{id:String(p.id),title:p.title||"",desc:p.desc||p.description||"",image:safeImg(p.image),price:Number(p.price)||0,badge:p.badge||"",featured:!!+p.featured,
+    start:t(p.start),end:t(p.end),stock:+p.stock||0,sold:+p.sold||0,order:+p.sortOrder||0,
+    items:(Array.isArray(items)?items:[]).map(i=>({name:i.name||"",qty:i.qty||"",image:safeImg(i.image)}))};
+}
+const isLive=p=>(!p.start||p.start<=now())&&(!p.end||p.end>now());
+const isSold=p=>p.stock>0&&p.sold>=p.stock;
+function left(end){
+  const ms=end-now();if(ms<=0)return"";
+  const d=Math.floor(ms/D),h=Math.floor(ms%D/H),m=Math.floor(ms%H/6e4),s=Math.floor(ms%6e4/1e3),z=n=>fa(String(n).padStart(2,"0"));
+  return d>0?`${fa(d)} روز و ${fa(h)} ساعت مانده`:`${z(h)}:${z(m)}:${z(s)} مانده`;
+}
+let packs=[],loaded=false,lastLive=-1;
+const cardHTML=p=>{const sold=isSold(p),tm=p.end?left(p.end):"";
+  return`<article class="pack${p.featured?" featured":""}${sold?" sold":""}" data-id="${esc(p.id)}" tabindex="0" role="button">
+  <div class="pack-img">${p.image?`<img src="${esc(p.image)}" alt="" loading="lazy" decoding="async">`:`<span class="pack-ph">PACK</span>`}${p.badge?`<span class="badge">${esc(p.badge)}</span>`:""}${tm?`<span class="timer" data-end="${p.end}">${tm}</span>`:""}</div>
+  <div class="pack-body"><div class="pack-title">${esc(p.title)}</div><div class="pack-desc">${esc(p.desc)}</div>
+  <div class="pack-foot">${priceHTML(p.price)}<span class="pill${sold?" off":""}">${sold?"تمام شد":"مشاهده"}</span></div></div></article>`};
+function renderPacks(){
+  const live=packs.filter(isLive).sort((a,b)=>(b.featured-a.featured)||(a.order-b.order));
+  lastLive=live.length;$("packs").hidden=!live.length;$("track").innerHTML=live.map(cardHTML).join("");
+  $("dots").innerHTML=live.length>1?live.map((_,i)=>`<button class="dot${i?"":" on"}" aria-label="پکیج ${i+1}"></button>`).join(""):"";
+  const cards=[...$("track").children],dots=[...$("dots").children],tr=$("track");
+  cards.forEach(c=>{const go=()=>openSheet(c.dataset.id);c.addEventListener("click",go);c.addEventListener("keydown",e=>{if(e.key==="Enter")go()})});
+  dots.forEach((d,i)=>d.addEventListener("click",()=>cards[i].scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"})));
+  tr.onscroll=()=>{const mid=tr.getBoundingClientRect().left+tr.clientWidth/2;let best=0,bd=1e9;
+    cards.forEach((c,i)=>{const r=c.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;best=i}});
+    dots.forEach((d,i)=>d.classList.toggle("on",i===best))};
+}
+setInterval(()=>{let ended=false;
+  document.querySelectorAll("[data-end]").forEach(el=>{const e=+el.dataset.end;if(e<=now())ended=true;else el.textContent=left(e)});
+  if(ended||packs.filter(isLive).length!==lastLive){renderPacks();if(curId&&sheetEl.classList.contains("show")){const p=packs.find(x=>x.id===curId);if(!p||!isLive(p))showGone()}}
+},1000);
+async function fetchPacks(){
+  try{const r=await fetch("https://api.gitirp.ir/api/packages");if(!r.ok)throw 0;const d=await r.json();return(d.packages||[]).filter(p=>+p.active!==0).map(normalize)}catch(e){return null}
+}
+document.addEventListener("visibilitychange",async()=>{
+  if(document.visibilityState!=="visible"||!loaded)return;
+  const list=await fetchPacks();
+  if(list){packs=(list.length||!DEMO)?list:demoPacks().map(normalize);renderPacks()}
+});
+(async function load(){
+  packs=(await fetchPacks())||[];
+  if(!packs.length&&DEMO)packs=demoPacks().map(normalize);
+  loaded=true;renderPacks();
+  const m=/^#pack-(.+)$/.exec(location.hash);
+  if(m){const id=decodeURIComponent(m[1]),p=packs.find(x=>x.id===id);p&&isLive(p)?openSheet(id,true):(openShell(true),showGone())}
+})();
+
+/* ================= package sheet ================= */
+let curId=null,sheetLocked=false,zoomList=[];
+function openShell(direct){
+  root.classList.toggle("direct",!!direct);root.classList.add("sheet-open");
+  sheetEl.style.transform="";sheetEl.classList.add("show");
+  if(!direct)backdrop.classList.add("show");
+  if(!sheetLocked){lock(true);sheetLocked=true}
+}
+function openSheet(id,direct){
+  const p=packs.find(x=>x.id===id);if(!p)return;curId=id;zoomList=[];
+  const z=src=>{zoomList.push(src);return zoomList.length-1};
+  const sold=isSold(p),tm=p.end?left(p.end):"",hint=`<span class="zoom-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>`;
+  $("sheetBody").innerHTML=`${p.image?`<div class="s-img" data-zi="${z(p.image)}"><img src="${esc(p.image)}" alt="">${p.badge?`<span class="badge">${esc(p.badge)}</span>`:""}${hint}</div>`:""}
+    <h3 class="s-title">${esc(p.title)}</h3>
+    ${tm?`<span class="s-note" data-end="${p.end}">${tm}</span>`:""}${p.stock?`<span class="s-note">${fa(Math.max(p.stock-p.sold,0))} عدد باقی مانده</span>`:""}
+    <p class="s-desc">${esc(p.desc)}</p>
+    ${p.items.length?`<div class="s-h">داخل این پکیج</div><ul class="s-items">${p.items.map(i=>`<li>${i.image?`<button class="thumb" data-zi="${z(i.image)}" aria-label="نمایش عکس"><img src="${esc(i.image)}" alt="" loading="lazy"></button>`:""}<span class="nm">${esc(i.name)}</span><span class="q">${esc(i.qty)}</span></li>`).join("")}</ul>`:""}`;
+  $("sheetBar").innerHTML=`${priceHTML(p.price)}<button class="pill${sold?" off":""}" id="buyBtn">${sold?"تمام شد":"خرید پکیج"}</button>`;
+  if(!sold)$("buyBtn").onclick=()=>openUrl(BUY_URL(p.id));
+  $("sheetBody").scrollTop=0;
+  openShell(direct);
+  const url="#pack-"+encodeURIComponent(id);
+  direct?hRep({pack:true},url):hPush({pack:true},url);
+}
+function showGone(){
+  curId=null;$("sheetBar").innerHTML="";
+  $("sheetBody").innerHTML=`<div class="gone">این پکیج دیگه موجود نیست.<br><button class="pill" id="goneBtn">رفتن به فروشگاه</button></div>`;
+  $("goneBtn").onclick=hardClose;
+}
+function hardClose(){
+  if(!sheetEl.classList.contains("show")&&!isDirect())return;
+  const wasDirect=isDirect();
+  closeLb(true);
+  sheetEl.classList.remove("show");sheetEl.style.transform="";root.classList.remove("sheet-open");root.classList.remove("direct");
+  if(!menuSheet.classList.contains("show"))backdrop.classList.remove("show");
+  if(sheetLocked){lock(false);sheetLocked=false}
+  curId=null;
+  if(wasDirect||/^#pack-/.test(location.hash))hRep(null,location.pathname+location.search);
+}
+function uiClose(){if(history.state&&history.state.pack&&!isDirect())history.back();else hardClose()}
+$("sX").addEventListener("click",uiClose);
+$("lbX").addEventListener("click",e=>{e.stopPropagation();uiLbClose()});
+backdrop.addEventListener("click",()=>{if(menuSheet.classList.contains("show")){closeMenu();return}if(!isDirect())uiClose()});
+addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(lbOpen)uiLbClose();else if(menuSheet.classList.contains("show"))closeMenu();else if(sheetEl.classList.contains("show")&&!isDirect())uiClose()});
+addEventListener("popstate",e=>{
+  if(lbOpen&&!(e.state&&e.state.lb)){closeLb(true);return}
+  if(sheetEl.classList.contains("show")&&!isDirect()&&!(e.state&&e.state.pack))hardClose();
+});
+
+/* share / copy link */
+$("sShare").addEventListener("click",async()=>{
+  if(!curId)return;const p=packs.find(x=>x.id===curId);if(!p)return;
+  const url=location.origin+location.pathname+"#pack-"+encodeURIComponent(p.id);
+  if(navigator.share){try{await navigator.share({title:p.title,text:p.desc,url})}catch(e){}return}
+  try{await navigator.clipboard.writeText(url)}catch(e){const ta=document.createElement("textarea");ta.value=url;document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(_){}document.body.removeChild(ta)}
+  toast("لینک کپی شد");
+});
+
+/* picture viewer */
+let lbOpen=false;
+function openLb(src){$("lbImg").src=src;$("lb").classList.add("on");lbOpen=true;hPush({pack:true,lb:true})}
+function closeLb(silent){if(!lbOpen)return;lbOpen=false;$("lb").classList.remove("on")}
+function uiLbClose(){if(history.state&&history.state.lb)history.back();else closeLb(true)}
+$("lb").addEventListener("click",uiLbClose);
+$("sheetBody").addEventListener("click",e=>{const t=e.target.closest("[data-zi]");if(t){const s=zoomList[+t.dataset.zi];if(s)openLb(s)}});
+
+/* pull the top of the sheet down to close — works even when the content is scrolled (header zone) */
+(function(){
+  const body=$("sheetBody");let y0=0,dy=0,armed=false,drag=false,inHead=false;
+  const off=()=>isDirect()||matchMedia("(min-width:700px)").matches||lbOpen;
+  sheetEl.addEventListener("touchstart",e=>{if(off())return;y0=e.touches[0].clientY;dy=0;drag=false;inHead=!!e.target.closest("#sHead");armed=inHead||body.scrollTop<=0},{passive:true});
+  sheetEl.addEventListener("touchmove",e=>{
+    if(!armed)return;dy=e.touches[0].clientY-y0;
+    if(!drag){if(dy>6&&(inHead||body.scrollTop<=0)){drag=true;sheetEl.classList.add("drag")}else{if(dy<-6)armed=false;return}}
+    if(e.cancelable)e.preventDefault();sheetEl.style.transform=`translateY(${Math.max(dy,0)}px)`;
+  },{passive:false});
+  const end=()=>{if(!drag){armed=false;return}drag=false;armed=false;sheetEl.classList.remove("drag");dy>100?uiClose():sheetEl.style.transform=""};
+  sheetEl.addEventListener("touchend",end);sheetEl.addEventListener("touchcancel",end);
+})();
+</script>
+</body>
+</html>
