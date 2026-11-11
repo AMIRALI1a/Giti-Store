@@ -6,7 +6,7 @@
 <title>GITI ROLE PLAY | STORE</title>
 <script>
   // A shared package link (#pack-ID): flag it before first paint so the store never flashes.
-  if (/^#(pack|level)-/.test(location.hash)) document.documentElement.classList.add('direct');
+  if (/^#(pack-|level-|tiers)/.test(location.hash)) document.documentElement.classList.add('direct');
 </script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,44 +68,36 @@ h1{font-weight:800;font-size:24px;margin-top:8px}
 .dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.25);border:0;padding:0;transition:width .25s,background .25s}
 .dot.on{width:20px;background:var(--cream)}
 
-/* switch (special | levels) */
-.seg{display:flex;justify-content:center;margin:2px 0 16px}.seg[hidden]{display:none}
-.seg-in{display:inline-flex;background:rgba(255,255,255,.08);border-radius:99px;padding:3px}
-.seg-in button{border:0;background:none;color:var(--dim);font-size:12.5px;font-weight:700;padding:7px 20px;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
-.seg-in button.on{background:#fff;color:var(--ink)}
-/* level packages */
-.lv-chips{display:flex;justify-content:center;gap:22px;margin:4px 0 18px;overflow-x:auto;scrollbar-width:none;padding:8px 6px}
-.lv-chips::-webkit-scrollbar{display:none}
-.lv-chip{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;color:var(--dim);font-size:11.5px;font-weight:700;cursor:pointer;flex-shrink:0}
-.lv-chip.on{color:var(--cream)}
-.lv-medal{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-weight:800;font-size:18px;color:rgba(0,0,0,.55);
-  background:radial-gradient(circle at 30% 25%,var(--lv1),var(--lv2));box-shadow:inset 0 2px 4px rgba(255,255,255,.35),0 4px 10px rgba(0,0,0,.35);transition:transform .25s}
-.lv-chip.on .lv-medal{transform:scale(1.14);outline:2px solid var(--lv1);outline-offset:3px}
-.lv-card{position:relative;border-radius:26px;padding:22px 20px 20px;text-align:right;max-width:420px;margin:0 auto;
-  background:linear-gradient(160deg,#2a2a50,#171730);background:linear-gradient(160deg,color-mix(in srgb,var(--lv1) 26%,#1b1b34),#171730 70%);
-  box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--lv1) 35%,transparent),0 0 40px color-mix(in srgb,var(--lv1) 20%,transparent);animation:lvin .3s ease}
-@keyframes lvin{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
-.lv-card .badge{right:auto;left:16px;top:18px}
-.lv-name{font-family:var(--latin);font-size:24px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--lv1)}
-.lv-more{display:block;margin:12px auto 0;background:none;border:0;color:var(--dim);font-size:12px;text-decoration:underline;cursor:pointer}
-.lv-desc{font-size:13px;color:var(--dim);line-height:1.9;margin-top:4px}
-.lv-price{display:flex;align-items:center;gap:8px;margin-top:14px}.lv-price .price{font-size:20px}
-.lv-dur{font-size:12.5px;color:var(--dim)}
-.lv-inc{margin-top:14px;font-size:12px;font-weight:700;color:var(--lv1)}
-.lv-list{margin-top:6px}
-.tick{width:22px;height:22px;border-radius:50%;background:var(--lv1);color:#1E1E36;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.lv-buy{width:100%;margin-top:18px;padding:13px;font-size:14px;background:var(--lv1)}
+/* tiers entry card (inside the package carousel) */
+.tiers-img{display:flex;align-items:center;justify-content:center;gap:14px;direction:ltr;background:radial-gradient(120% 120% at 50% 0%,rgba(255,212,169,.2),transparent 65%),linear-gradient(135deg,#34345c,#1b1b34)}
+.lv-medal{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-weight:800;font-size:16px;color:rgba(0,0,0,.55);
+  background:radial-gradient(circle at 30% 25%,var(--lv1),var(--lv2));box-shadow:inset 0 2px 4px rgba(255,255,255,.35),0 4px 10px rgba(0,0,0,.35)}
+.tiers-img .lv-medal.mid{width:64px;height:64px;font-size:22px}
+.pack-title.tiers-title{font-family:var(--latin);font-size:11.5px;letter-spacing:.6px;direction:ltr;text-align:right}
+.from{font-size:11px;color:var(--dim);margin-inline-end:2px}
+.pack-foot .pf{display:inline-flex;align-items:center;gap:5px}
 
-/* level page (shareable) */
-.lvp-steps{display:flex;align-items:center;justify-content:center;gap:4px;margin:6px 0 18px;flex-wrap:wrap}
-.lvp-step{background:none;border:0;border-radius:99px;padding:7px 13px;font-family:var(--latin);font-weight:800;font-size:11.5px;letter-spacing:1.5px;color:var(--dim);cursor:pointer;direction:ltr;text-transform:uppercase}
-.lvp-step.on{background:var(--lv1);color:#1E1E36}
-.lvp-arrow{color:var(--dim);opacity:.5;font-size:13px}
-.lvp-hero{text-align:center;padding:24px 8px 18px;border-radius:24px;background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--lv1) 28%,transparent),transparent 70%)}
-.lvp-kicker{font-family:var(--latin);font-weight:700;font-size:11px;letter-spacing:3px;color:var(--lv1);direction:ltr}
-.lvp-name{font-family:var(--latin);font-weight:800;font-size:34px;letter-spacing:2px;text-transform:uppercase;margin-top:6px;direction:ltr}
-.lvp-desc{font-size:13px;color:var(--dim);line-height:1.9;margin-top:6px}
-.lvp-price{display:inline-flex;align-items:baseline;gap:8px;margin-top:14px}.lvp-price .price{font-size:22px}
+/* tiers page */
+.tp-head{text-align:center;padding:6px 0 10px}
+.tp-kicker{font-family:var(--latin);font-weight:700;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.tp-title{font-size:22px;font-weight:800;margin-top:6px}
+.tp-sub{font-size:12.5px;color:var(--dim);line-height:1.9;margin-top:4px}
+.tp-track{display:flex;align-items:stretch;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -20px;padding:14px calc(50% - min(39vw,150px)) 18px;direction:ltr;position:relative}
+.tp-track::-webkit-scrollbar{display:none}
+.tp-card{flex:0 0 min(78vw,300px);scroll-snap-align:center;display:flex;flex-direction:column;text-align:right;direction:rtl;border-radius:26px;padding:22px 18px 18px;
+  background:linear-gradient(160deg,#2a2a50,#171730);background:linear-gradient(160deg,color-mix(in srgb,var(--lv1) 24%,#1b1b34),#171730 72%);
+  box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--lv1) 30%,transparent)}
+.tp-card.mid{box-shadow:var(--shadow),0 0 0 1.5px var(--lv1),0 0 42px color-mix(in srgb,var(--lv1) 26%,transparent)}
+.tp-card .lv-medal{width:54px;height:54px;align-self:center;font-size:19px}
+.tp-name{font-family:var(--latin);font-size:24px;font-weight:800;letter-spacing:2px;color:var(--lv1);text-align:center;margin-top:12px}
+.tp-desc{font-size:12.5px;color:var(--dim);line-height:1.9;text-align:center;margin-top:4px}
+.tp-price{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:14px}.tp-price .price{font-size:21px}
+.lv-dur{font-size:12.5px;color:var(--dim)}
+.lv-inc{margin-top:14px;font-size:12px;font-weight:700;color:var(--lv1);text-align:center}
+.tp-card .lv-list{margin-top:8px;flex:1}
+.tick{width:22px;height:22px;border-radius:50%;background:var(--lv1);color:#1E1E36;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tp-buy{width:100%;margin-top:16px;padding:12px;font-size:14px;background:var(--lv1)}
+.sheet.tiers .sheet-body{padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
 
 /* sections */
 .list{display:flex;flex-direction:column;gap:12px}
@@ -202,6 +194,12 @@ h1{font-weight:800;font-size:24px;margin-top:8px}
   .sheet{bottom:50%;transform:translateY(50%) scale(.96);opacity:0;border-radius:28px;max-height:84vh;transition:opacity .25s,transform .3s,visibility 0s linear .3s}
   .sheet.show{transform:translateY(50%);opacity:1;transition:opacity .25s,transform .3s,visibility 0s}
 }
+@media (min-width:700px){
+  .sheet.tiers{max-width:1040px}
+  .tp-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;padding:26px 4px 18px;overflow:visible;gap:18px}
+  .tp-card{flex:none}.tp-card.mid{transform:translateY(-10px) scale(1.03)}
+  .tp-dots{display:none}
+}
 /* direct link: full page, menu button instead of X */
 html.direct .wrap,html.direct .topbar{visibility:hidden}
 html.direct .sheet{bottom:0;top:0;max-width:none;max-height:none;height:100%;border-radius:0;box-shadow:none;opacity:1;transform:none;visibility:visible;transition:none}
@@ -211,6 +209,7 @@ html.direct .top-logo{visibility:hidden}
 html.direct .only-direct{display:flex}
 html.direct .backdrop{z-index:120}html.direct .menu-sheet{z-index:130}
 html.direct .sheet-body{max-width:560px;width:100%;margin:0 auto}
+html.direct .sheet.tiers .sheet-body{max-width:1080px}
 html.direct .s-bar{justify-content:center}html.direct .s-bar>*{max-width:560px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -229,10 +228,9 @@ html.direct .s-bar{justify-content:center}html.direct .s-bar>*{max-width:560px}
   </div>
 
   <section class="packs" id="packs" hidden>
-    <div class="sec-head"><h2 class="sec-title" id="packTitle">پکیج‌های ویژه</h2><span class="sec-sub" id="packSub">محدود و اختصاصی</span></div>
-    <div class="seg" id="packTabs" hidden><div class="seg-in"><button id="tabSpecial" class="on">ویژه</button><button id="tabLevel">سطح‌ها</button></div></div>
-    <div id="spWrap"><div class="track" id="track"></div><div class="dots" id="dots"></div></div>
-    <div id="lvWrap" hidden><div class="lv-chips" id="lvChips"></div><div id="lvCard"></div></div>
+    <div class="sec-head"><h2 class="sec-title">پکیج‌های ویژه</h2><span class="sec-sub">انتخاب‌های اختصاصی گیتی</span></div>
+    <div class="track" id="track"></div>
+    <div class="dots" id="dots"></div>
   </section>
 
   <div class="sec-head"><h2 class="sec-title">بخش‌های فروشگاه</h2></div>
@@ -368,55 +366,34 @@ const cardHTML=p=>{const sold=isSold(p),tm=p.end?left(p.end):"";
   <div class="pack-img">${p.image?`<img src="${esc(p.image)}" alt="" loading="lazy" decoding="async">`:`<span class="pack-ph">PACK</span>`}${p.badge?`<span class="badge">${esc(p.badge)}</span>`:""}${tm?`<span class="timer" data-end="${p.end}">${tm}</span>`:""}</div>
   <div class="pack-body"><div class="pack-title">${esc(p.title)}</div><div class="pack-desc">${esc(p.desc)}</div>
   <div class="pack-foot">${priceHTML(p.price)}<span class="pill${sold?" off":""}">${sold?"تمام شد":"مشاهده"}</span></div></div></article>`};
-let packTab="special",lvSel=null,lvZoom=[];
 const THEMES={bronze:["#d08a52","#5e3a22"],silver:["#d5dbe8","#69738a"],gold:["#ffd4a9","#a8742e"],diamond:["#8fd8ff","#3a6fb0"]};
 const lvColors=m=>(m.theme==="custom"&&m.color)?[m.color,`color-mix(in srgb,${m.color} 45%,#000)`]:(THEMES[m.theme]||THEMES.gold);
+const tiers=()=>packs.filter(p=>p.kind==="level"&&isLive(p)).sort((a,b)=>(a.meta.level||0)-(b.meta.level||0)||(a.order-b.order));
+function tiersCardHTML(lv){
+  const mid=Math.floor((lv.length-1)/2),min=Math.min(...lv.map(p=>p.price));
+  return`<article class="pack" data-tiers="1" tabindex="0" role="button">
+  <div class="pack-img tiers-img">${lv.map((p,i)=>{const c=lvColors(p.meta);return`<span class="lv-medal${i===mid?" mid":""}" style="--lv1:${c[0]};--lv2:${c[1]}">${i+1}</span>`}).join("")}</div>
+  <div class="pack-body"><div class="pack-title tiers-title">${lv.map(p=>esc(p.title)).join(" › ")}</div><div class="pack-desc">سه انتخاب با امکانات بیشتر در هر مرحله؛ مقایسه کن و بهترینش رو بردار.</div>
+  <div class="pack-foot"><span class="pf"><span class="from">از</span>${priceHTML(min)}</span><span class="pill">مشاهده</span></div></div></article>`;
+}
 function renderPacks(){
   const live=packs.filter(isLive);lastLive=live.length;
   const sp=live.filter(p=>p.kind!=="level").sort((a,b)=>(b.featured-a.featured)||(a.order-b.order));
-  const lv=live.filter(p=>p.kind==="level").sort((a,b)=>(a.meta.level||0)-(b.meta.level||0)||(a.order-b.order));
-  $("packs").hidden=!live.length;
-  if(!sp.length)packTab="level";else if(!lv.length)packTab="special";
-  $("packTabs").hidden=!(sp.length&&lv.length);
-  $("tabSpecial").classList.toggle("on",packTab==="special");$("tabLevel").classList.toggle("on",packTab==="level");
-  $("packTitle").textContent=sp.length&&lv.length?"پکیج‌ها":lv.length?"پکیج‌های سطحی":"پکیج‌های ویژه";
-  $("packSub").textContent=packTab==="level"?"هر سطح، امکانات بیشتر":"محدود و اختصاصی";
-  $("spWrap").hidden=packTab!=="special";$("lvWrap").hidden=packTab!=="level";
-  renderSpecial(sp);renderLevels(lv);
-}
-function renderSpecial(live){
-  $("track").innerHTML=live.map(cardHTML).join("");
-  $("dots").innerHTML=live.length>1?live.map((_,i)=>`<button class="dot${i?"":" on"}" aria-label="پکیج ${i+1}"></button>`).join(""):"";
+  const lv=tiers();
+  $("packs").hidden=!(sp.length||lv.length);
+  $("track").innerHTML=(lv.length?tiersCardHTML(lv):"")+sp.map(cardHTML).join("");
   const cards=[...$("track").children],dots=[...$("dots").children],tr=$("track");
-  cards.forEach(c=>{const go=()=>openSheet(c.dataset.id);c.addEventListener("click",go);c.addEventListener("keydown",e=>{if(e.key==="Enter")go()})});
-  dots.forEach((d,i)=>d.addEventListener("click",()=>cards[i].scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"})));
+  $("dots").innerHTML=cards.length>1?cards.map((_,i)=>`<button class="dot${i?"":" on"}" aria-label="پکیج ${i+1}"></button>`).join(""):"";
+  const dts=[...$("dots").children];
+  cards.forEach(c=>{const go=()=>c.dataset.tiers?openTiers():openSheet(c.dataset.id);c.addEventListener("click",go);c.addEventListener("keydown",e=>{if(e.key==="Enter")go()})});
+  dts.forEach((d,i)=>d.addEventListener("click",()=>cards[i].scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"})));
   tr.onscroll=()=>{const mid=tr.getBoundingClientRect().left+tr.clientWidth/2;let best=0,bd=1e9;
     cards.forEach((c,i)=>{const r=c.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;best=i}});
-    dots.forEach((d,i)=>d.classList.toggle("on",i===best))};
+    dts.forEach((d,i)=>d.classList.toggle("on",i===best))};
 }
-function renderLevels(lv){
-  if(!lv.length){$("lvChips").innerHTML="";$("lvCard").innerHTML="";return}
-  if(!lv.some(p=>p.id===lvSel))lvSel=(lv.find(p=>p.meta.popular)||lv[0]).id;
-  $("lvChips").innerHTML=lv.map((p,i)=>{const c=lvColors(p.meta);return`<button class="lv-chip${p.id===lvSel?" on":""}" data-id="${esc(p.id)}" style="--lv1:${c[0]};--lv2:${c[1]}"><span class="lv-medal">${fa(i+1)}</span><span>${esc(p.title)}</span></button>`}).join("");
-  const i=lv.findIndex(p=>p.id===lvSel),p=lv[i],prev=i>0?lv[i-1]:null,c=lvColors(p.meta);
-  lvZoom=[];const z=src=>{lvZoom.push(src);return lvZoom.length-1};
-  const dur=p.meta.durationDays?`${fa(p.meta.durationDays)} روز`:"دائمی";
-  const rows=(p.meta.benefits||[]).map(b=>`<li><span class="tick">✓</span><span class="nm">${esc(b)}</span></li>`).join("")
-    +p.items.map(it=>`<li>${it.image?`<button class="thumb" data-lz="${z(it.image)}" aria-label="نمایش عکس"><img src="${esc(it.image)}" alt="" loading="lazy"></button>`:`<span class="tile">${glyph(it.name)}</span>`}<span class="nm">${esc(it.name)}</span><span class="q">${esc(it.qty)}</span></li>`).join("");
-  $("lvCard").innerHTML=`<article class="lv-card" style="--lv1:${c[0]};--lv2:${c[1]}">${p.meta.popular?`<span class="badge">محبوب‌ترین</span>`:""}
-    <div class="lv-name">${esc(p.title)}</div>${p.desc?`<div class="lv-desc">${esc(p.desc)}</div>`:""}
-    <div class="lv-price">${priceHTML(p.price)}<span class="lv-dur">/ ${dur}</span></div>
-    ${p.meta.includesPrev&&prev?`<div class="lv-inc">شامل همه‌ی مزایای «${esc(prev.title)}» و موارد زیر</div>`:""}
-    ${rows?`<ul class="s-items lv-list">${rows}</ul>`:""}
-    <button class="pill lv-buy" data-id="${esc(p.id)}">انتخاب این سطح</button><button class="lv-more" data-id="${esc(p.id)}">صفحه‌ی کامل و لینک اشتراکی</button></article>`;
-}
-$("lvChips").addEventListener("click",e=>{const b=e.target.closest(".lv-chip");if(!b)return;lvSel=b.dataset.id;renderPacks()});
-$("lvCard").addEventListener("click",e=>{const t=e.target.closest("[data-lz]");if(t){const src=lvZoom[+t.dataset.lz];if(src)openLb(src);return}const m2=e.target.closest(".lv-more");if(m2){openLevel(m2.dataset.id);return}const b=e.target.closest(".lv-buy");if(b)openUrl(BUY_URL(b.dataset.id))});
-$("tabSpecial").addEventListener("click",()=>{packTab="special";renderPacks()});
-$("tabLevel").addEventListener("click",()=>{packTab="level";renderPacks()});
 setInterval(()=>{let ended=false;
   document.querySelectorAll("[data-end]").forEach(el=>{const e=+el.dataset.end;if(e<=now())ended=true;else el.textContent=left(e)});
-  if(ended||packs.filter(isLive).length!==lastLive){renderPacks();if(curId&&sheetEl.classList.contains("show")){const p=packs.find(x=>x.id===curId);if(!p||!isLive(p))showGone()}}
+  if(ended||packs.filter(isLive).length!==lastLive){renderPacks();if(sheetEl.classList.contains("show")){if(curTiers){if(!tiers().length)showGone()}else if(curId){const p=packs.find(x=>x.id===curId);if(!p||!isLive(p))showGone()}}}
 },1000);
 async function fetchPacks(){
   try{const r=await fetch("https://api.gitirp.ir/api/packages");if(!r.ok)throw 0;const d=await r.json();return(d.packages||[]).filter(p=>+p.active!==0).map(normalize)}catch(e){return null}
@@ -430,13 +407,15 @@ document.addEventListener("visibilitychange",async()=>{
   packs=(await fetchPacks())||[];
   if(!packs.length&&DEMO)packs=demoPacks().map(normalize);
   loaded=true;renderPacks();
-  const m=/^#(pack|level)-(.+)$/.exec(location.hash);
-  if(m){const id=decodeURIComponent(m[2]),p=packs.find(x=>x.id===id);
-    if(p&&isLive(p)){p.kind==="level"?openLevel(id,true):openSheet(id,true)}else{openShell(true);showGone()}}
+  const m=/^#(pack|level|tiers)(?:-(.+))?$/.exec(location.hash);
+  if(m){
+    if(m[1]==="pack"){const id=decodeURIComponent(m[2]||""),p=packs.find(x=>x.id===id);p&&isLive(p)&&p.kind!=="level"?openSheet(id,true):(openShell(true),showGone())}
+    else{tiers().length?openTiers(m[2]?decodeURIComponent(m[2]):null,true):(openShell(true),showGone())}
+  }
 })();
 
 /* ================= package sheet ================= */
-let curId=null,sheetLocked=false,zoomList=[];
+let curId=null,curTiers=false,sheetLocked=false,zoomList=[];
 function openShell(direct){
   root.classList.toggle("direct",!!direct);root.classList.add("sheet-open");
   sheetEl.style.transform="";sheetEl.classList.add("show");
@@ -444,7 +423,7 @@ function openShell(direct){
   if(!sheetLocked){lock(true);sheetLocked=true}
 }
 function openSheet(id,direct){
-  const p=packs.find(x=>x.id===id);if(!p)return;curId=id;zoomList=[];
+  const p=packs.find(x=>x.id===id);if(!p)return;curId=id;curTiers=false;sheetEl.classList.remove("tiers");zoomList=[];
   const z=src=>{zoomList.push(src);return zoomList.length-1};
   const sold=isSold(p),tm=p.end?left(p.end):"",hint=`<span class="zoom-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>`;
   $("sheetBody").innerHTML=`${p.image?`<div class="s-img" data-zi="${z(p.image)}"><img src="${esc(p.image)}" alt="">${p.badge?`<span class="badge">${esc(p.badge)}</span>`:""}${hint}</div>`:""}
@@ -459,27 +438,39 @@ function openSheet(id,direct){
   const url="#pack-"+encodeURIComponent(id);
   direct?hRep({pack:true},url):hPush({pack:true},url);
 }
-function openLevel(id,direct,swap){
-  const lv=packs.filter(q=>q.kind==="level"&&isLive(q)).sort((a,b)=>(a.meta.level||0)-(b.meta.level||0)||(a.order-b.order));
-  const i=lv.findIndex(q=>q.id===id);if(i<0)return;
-  const p=lv[i],prev=i>0?lv[i-1]:null,c=lvColors(p.meta);curId=id;zoomList=[];
+function openTiers(focusId,direct){
+  const lv=tiers();if(!lv.length)return;
+  curId=null;curTiers=true;zoomList=[];
   const z=src=>{zoomList.push(src);return zoomList.length-1};
-  const dur=p.meta.durationDays?`${fa(p.meta.durationDays)} روز`:"دائمی";
-  const rows=(p.meta.benefits||[]).map(b=>`<li><span class="tick">✓</span><span class="nm">${esc(b)}</span></li>`).join("")
-    +p.items.map(it=>`<li>${it.image?`<button class="thumb" data-zi="${z(it.image)}" aria-label="نمایش عکس"><img src="${esc(it.image)}" alt="" loading="lazy"></button>`:`<span class="tile">${glyph(it.name)}</span>`}<span class="nm">${esc(it.name)}</span><span class="q">${esc(it.qty)}</span></li>`).join("");
-  $("sheetBody").innerHTML=`<div class="lvp" style="--lv1:${c[0]};--lv2:${c[1]}">
-    ${lv.length>1?`<div class="lvp-steps">${lv.map((q,k)=>`${k?'<span class="lvp-arrow">›</span>':""}<button class="lvp-step${q.id===id?" on":""}" data-lvid="${esc(q.id)}" style="--lv1:${lvColors(q.meta)[0]}">${esc(q.title)}</button>`).join("")}</div>`:""}
-    <div class="lvp-hero"><div class="lvp-kicker">LEVEL ${i+1}</div><h3 class="lvp-name">${esc(p.title)}</h3>${p.desc?`<p class="lvp-desc">${esc(p.desc)}</p>`:""}
-      <div class="lvp-price">${priceHTML(p.price)}<span class="lv-dur">/ ${dur}</span></div></div>
-    ${p.meta.popular?`<div class="lv-inc" style="text-align:center;margin-top:12px">★ محبوب‌ترین</div>`:""}
-    ${p.meta.includesPrev&&prev?`<div class="lv-inc" style="text-align:center;margin-top:10px">شامل همه‌ی مزایای «${esc(prev.title)}» و موارد زیر</div>`:""}
-    ${rows?`<ul class="s-items lv-list" style="margin-top:12px">${rows}</ul>`:""}</div>`;
-  $("sheetBar").innerHTML=`${priceHTML(p.price)}<button class="pill" id="buyBtn" style="background:${c[0]}">انتخاب این سطح</button>`;
-  $("buyBtn").onclick=()=>openUrl(BUY_URL(p.id));
+  const mid=Math.floor((lv.length-1)/2);
+  let ctr=focusId?lv.findIndex(p=>p.id===focusId):mid;if(ctr<0)ctr=mid;
+  const card=(p,i)=>{
+    const c=lvColors(p.meta),prev=i>0?lv[i-1]:null,dur=p.meta.durationDays?`${fa(p.meta.durationDays)} روز`:"دائمی";
+    const rows=(p.meta.benefits||[]).map(b=>`<li><span class="tick">✓</span><span class="nm">${esc(b)}</span></li>`).join("")
+      +p.items.map(it=>`<li>${it.image?`<button class="thumb" data-zi="${z(it.image)}" aria-label="نمایش عکس"><img src="${esc(it.image)}" alt="" loading="lazy"></button>`:`<span class="tile">${glyph(it.name)}</span>`}<span class="nm">${esc(it.name)}</span><span class="q">${esc(it.qty)}</span></li>`).join("");
+    return`<article class="tp-card${i===mid?" mid":""}" data-id="${esc(p.id)}" style="--lv1:${c[0]};--lv2:${c[1]}">
+      <span class="lv-medal">${i+1}</span><h4 class="tp-name">${esc(p.title)}</h4>${p.desc?`<p class="tp-desc">${esc(p.desc)}</p>`:""}
+      <div class="tp-price">${priceHTML(p.price)}<span class="lv-dur">/ ${dur}</span></div>
+      ${p.meta.includesPrev&&prev?`<div class="lv-inc">شامل همه‌ی مزایای «${esc(prev.title)}» و موارد زیر</div>`:""}
+      ${rows?`<ul class="s-items lv-list">${rows}</ul>`:`<div style="flex:1"></div>`}
+      <button class="pill tp-buy" data-id="${esc(p.id)}">انتخاب ${esc(p.title)}</button></article>`};
+  $("sheetBody").innerHTML=`<div class="tp-head"><div class="tp-kicker">GITI PACKS</div><h3 class="tp-title">انتخاب کن، بالا برو</h3><p class="tp-sub">هر مرحله همه‌ی امکانات مرحله‌ی قبل رو داره و بیشتر.</p></div>
+    <div class="tp-track" id="tpTrack">${lv.map(card).join("")}</div>
+    ${lv.length>1?`<div class="dots tp-dots" id="tpDots">${lv.map((_,i)=>`<button class="dot${i===ctr?" on":""}" aria-label="${i+1}"></button>`).join("")}</div>`:""}`;
+  $("sheetBar").innerHTML="";
+  const tr=$("tpTrack"),cs=[...tr.children],ds=[...($("tpDots")?$("tpDots").children:[])];
+  const centre=(i,smooth)=>{const c=cs[i];if(c)tr.scrollTo({left:c.offsetLeft-(tr.clientWidth-c.offsetWidth)/2,behavior:smooth?"smooth":"auto"})};
+  tr.onscroll=()=>{const m=tr.getBoundingClientRect().left+tr.clientWidth/2;let best=0,bd=1e9;
+    cs.forEach((c,i)=>{const r=c.getBoundingClientRect(),d=Math.abs(r.left+r.width/2-m);if(d<bd){bd=d;best=i}});
+    ds.forEach((d,i)=>d.classList.toggle("on",i===best))};
+  ds.forEach((d,i)=>d.addEventListener("click",()=>centre(i,true)));
+  tr.querySelectorAll(".tp-buy").forEach(b=>b.addEventListener("click",()=>openUrl(BUY_URL(b.dataset.id))));
   $("sheetBody").scrollTop=0;
-  const url="#level-"+encodeURIComponent(id);
-  if(sheetEl.classList.contains("show"))hRep({pack:true},url);
-  else{openShell(direct);direct?hRep({pack:true},url):hPush({pack:true},url)}
+  sheetEl.classList.add("tiers");
+  const url="#tiers"+(focusId?"-"+encodeURIComponent(focusId):"");
+  openShell(direct);
+  direct?hRep({pack:true},url):hPush({pack:true},url);
+  centre(ctr,false);requestAnimationFrame(()=>centre(ctr,false));setTimeout(()=>centre(ctr,false),60);
 }
 function showGone(){
   curId=null;$("sheetBar").innerHTML="";
@@ -490,11 +481,11 @@ function hardClose(){
   if(!sheetEl.classList.contains("show")&&!isDirect())return;
   const wasDirect=isDirect();
   closeLb(true);
-  sheetEl.classList.remove("show");sheetEl.style.transform="";root.classList.remove("sheet-open");root.classList.remove("direct");
+  sheetEl.classList.remove("show","tiers");sheetEl.style.transform="";root.classList.remove("sheet-open");curTiers=false;root.classList.remove("direct");
   if(!menuSheet.classList.contains("show"))backdrop.classList.remove("show");
   if(sheetLocked){lock(false);sheetLocked=false}
   curId=null;
-  if(wasDirect||/^#(pack|level)-/.test(location.hash))hRep(null,location.pathname+location.search);
+  if(wasDirect||/^#(pack-|level-|tiers)/.test(location.hash))hRep(null,location.pathname+location.search);
 }
 function uiClose(){if(history.state&&history.state.pack&&!isDirect())history.back();else hardClose()}
 $("sX").addEventListener("click",uiClose);
@@ -508,9 +499,9 @@ addEventListener("popstate",e=>{
 
 /* share / copy link */
 $("sShare").addEventListener("click",async()=>{
-  if(!curId)return;const p=packs.find(x=>x.id===curId);if(!p)return;
-  const url=location.origin+location.pathname+(p.kind==="level"?"#level-":"#pack-")+encodeURIComponent(p.id);
-  if(navigator.share){try{await navigator.share({title:p.title,text:p.desc,url})}catch(e){}return}
+  const tiersNow=curTiers;if(!curId&&!tiersNow)return;const p=tiersNow?null:packs.find(x=>x.id===curId);if(!tiersNow&&!p)return;
+  const url=location.origin+location.pathname+(tiersNow?"#tiers":"#pack-"+encodeURIComponent(p.id));
+  if(navigator.share){try{await navigator.share(tiersNow?{title:"GITI",url}:{title:p.title,text:p.desc,url})}catch(e){}return}
   try{await navigator.clipboard.writeText(url)}catch(e){const ta=document.createElement("textarea");ta.value=url;document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(_){}document.body.removeChild(ta)}
   toast("لینک کپی شد");
 });
@@ -521,7 +512,7 @@ function openLb(src){$("lbImg").src=src;$("lb").classList.add("on");lbOpen=true;
 function closeLb(silent){if(!lbOpen)return;lbOpen=false;$("lb").classList.remove("on")}
 function uiLbClose(){if(history.state&&history.state.lb)history.back();else closeLb(true)}
 $("lb").addEventListener("click",uiLbClose);
-$("sheetBody").addEventListener("click",e=>{const st=e.target.closest("[data-lvid]");if(st){openLevel(st.dataset.lvid,isDirect(),true);return}const t=e.target.closest("[data-zi]");if(t){const s=zoomList[+t.dataset.zi];if(s)openLb(s)}});
+$("sheetBody").addEventListener("click",e=>{const t=e.target.closest("[data-zi]");if(t){const s=zoomList[+t.dataset.zi];if(s)openLb(s)}});
 
 /* pull the top of the sheet down to close — works even when the content is scrolled (header zone) */
 (function(){
