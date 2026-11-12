@@ -72,13 +72,13 @@ h1{font-weight:800;font-size:24px;margin-top:8px}
 .tiers-img{display:flex;align-items:center;justify-content:center;gap:14px;direction:ltr;background:radial-gradient(120% 120% at 50% 0%,rgba(255,212,169,.2),transparent 65%),linear-gradient(135deg,#34345c,#1b1b34)}
 .lv-medal{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-weight:800;font-size:16px;color:rgba(0,0,0,.55);
   background:radial-gradient(circle at 30% 25%,var(--lv1),var(--lv2));box-shadow:inset 0 2px 4px rgba(255,255,255,.35),0 4px 10px rgba(0,0,0,.35)}
-.tiers-img .lv-medal.mid{width:64px;height:64px;font-size:22px}
 .pack-title.tiers-title{font-family:var(--latin);font-size:11.5px;letter-spacing:.6px;direction:ltr;text-align:right}
+.tiers-desc{-webkit-line-clamp:3;min-height:64px}
 .from{font-size:11px;color:var(--dim);margin-inline-end:2px}
 .pack-foot .pf{display:inline-flex;align-items:center;gap:5px}
 
 /* tiers page */
-.tp-head{text-align:center;padding:6px 0 10px}
+.tp-head{text-align:center;padding:14px 0 10px}
 .tp-kicker{font-family:var(--latin);font-weight:700;font-size:11px;letter-spacing:3px;color:var(--gold)}
 .tp-title{font-size:22px;font-weight:800;margin-top:6px}
 .tp-sub{font-size:12.5px;color:var(--dim);line-height:1.9;margin-top:4px}
@@ -87,7 +87,6 @@ h1{font-weight:800;font-size:24px;margin-top:8px}
 .tp-card{flex:0 0 min(78vw,300px);scroll-snap-align:center;display:flex;flex-direction:column;text-align:right;direction:rtl;border-radius:26px;padding:22px 18px 18px;
   background:linear-gradient(160deg,#2a2a50,#171730);background:linear-gradient(160deg,color-mix(in srgb,var(--lv1) 24%,#1b1b34),#171730 72%);
   box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--lv1) 30%,transparent)}
-.tp-card.mid{box-shadow:var(--shadow),0 0 0 1.5px var(--lv1),0 0 42px color-mix(in srgb,var(--lv1) 26%,transparent)}
 .tp-card .lv-medal{width:54px;height:54px;align-self:center;font-size:19px}
 .tp-name{font-family:var(--latin);font-size:24px;font-weight:800;letter-spacing:2px;color:var(--lv1);text-align:center;margin-top:12px}
 .tp-desc{font-size:12.5px;color:var(--dim);line-height:1.9;text-align:center;margin-top:4px}
@@ -161,11 +160,10 @@ h1{font-weight:800;font-size:24px;margin-top:8px}
 .s-items{list-style:none}
 .s-items li{display:flex;align-items:center;gap:12px;padding:11px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.07)}
 .s-items li:last-child{border:0}
-.s-items .thumb{width:54px;height:54px;border-radius:14px;border:0;padding:4px;flex-shrink:0;background:rgba(255,255,255,.06);cursor:zoom-in}
+.s-items .thumb{width:76px;height:56px;border-radius:12px;border:0;padding:0;flex-shrink:0;background:none;cursor:zoom-in}
 .s-items .thumb img{width:100%;height:100%;object-fit:contain}
 .s-items .nm{flex:1}
 .s-items .q{color:var(--dim);font-family:var(--latin);font-weight:600;unicode-bidi:plaintext;text-align:left}
-.s-items .tile{width:54px;height:54px;border-radius:14px;flex-shrink:0;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-weight:800;font-size:22px;color:var(--gold)}
 .s-bar{position:absolute;left:0;right:0;bottom:0;padding:14px 20px calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;gap:14px;
   background:rgba(23,23,48,.86);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .s-bar:empty{display:none}
@@ -197,8 +195,7 @@ h1{font-weight:800;font-size:24px;margin-top:8px}
 @media (min-width:700px){
   .sheet.tiers{max-width:1040px}
   .tp-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;padding:26px 4px 18px;overflow:visible;gap:18px}
-  .tp-card{flex:none}.tp-card.mid{transform:translateY(-10px) scale(1.03)}
-  .tp-dots{display:none}
+  .tp-card{flex:none}  .tp-dots{display:none}
 }
 /* direct link: full page, menu button instead of X */
 html.direct .wrap,html.direct .topbar{visibility:hidden}
@@ -333,25 +330,34 @@ const BUY_URL=id=>"https://t.me/yourbot?start=buy_package_"+id; // placeholder, 
 const H=36e5,D=24*H,now=()=>Date.now();
 const svgImg=(t,a,b)=>"data:image/svg+xml;charset=utf-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/><text x="400" y="275" font-family="sans-serif" font-size="64" font-weight="800" fill="#fff" fill-opacity=".85" text-anchor="middle">${t}</text></svg>`);
 const demoPacks=()=>[
-  {id:"lv1",kind:"level",title:"STANDARD",desc:"شروع مناسب برای بازیکن‌های جدید.",price:250000,meta:{level:1,theme:"silver",durationDays:30,benefits:["برچسب اختصاصی کنار اسم","۱ اسلات ماشین اضافه"]},items:[{name:"پول داخل بازی",qty:"2 میلیون دلار"}]},
-  {id:"lv2",kind:"level",title:"PREMIUM",desc:"انتخاب بیشتر بازیکن‌های فعال.",price:550000,meta:{level:2,theme:"gold",durationDays:30,includesPrev:1,popular:1,benefits:["اولویت ورود به سرور","۱ اسلات خانه اضافه"]},items:[{name:"اسکین",qty:"#12",image:svgImg("SKIN 12","#7a4b6e","#2b1b34")},{name:"سکه",qty:"10"}]},
-  {id:"lv3",kind:"level",title:"ULTIMATE",desc:"کامل‌ترین سطح، بدون محدودیت.",price:1200000,meta:{level:3,theme:"diamond",durationDays:30,includesPrev:1,benefits:["دسترسی زودهنگام به رویدادها","رنگ ویژه در چت"]},items:[{name:"ماشین VIP",qty:"#305",image:svgImg("CAR 305","#2f5b7a","#101c2b")},{name:"پول داخل بازی",qty:"5 میلیون دلار"},{name:"سکه",qty:"30"}]},
+  {id:"tiers0",kind:"tiers",title:"پکیج‌های گیتی",desc:"سه انتخاب برای هر سبک بازی؛ از شروع ساده تا کامل‌ترین.",image:svgImg("GITI TIERS","#4b3f72","#1b1b34"),price:0,meta:{},items:[]},
+  {id:"lv1",kind:"level",title:"STANDARD",desc:"شروع مناسب برای بازیکن‌های جدید.",price:250000,meta:{level:1,theme:"silver",durationDays:30,benefits:["برچسب اختصاصی کنار اسم","۱ اسلات ماشین اضافه"]},items:[{kind:"money",name:"پول داخل بازی",qty:"$2,000,000"}]},
+  {id:"lv2",kind:"level",title:"PREMIUM",desc:"انتخاب بیشتر بازیکن‌های فعال.",price:550000,meta:{level:2,theme:"gold",durationDays:30,includesPrev:1,popular:1,benefits:["اولویت ورود به سرور","۱ اسلات خانه اضافه"]},items:[{name:"اسکین",qty:"#12",image:svgImg("SKIN 12","#7a4b6e","#2b1b34")},{kind:"donate",name:"دونیت",qty:"10"}]},
+  {id:"lv3",kind:"level",title:"ULTIMATE",desc:"کامل‌ترین سطح، بدون محدودیت.",price:1200000,meta:{level:3,theme:"diamond",durationDays:30,includesPrev:1,benefits:["دسترسی زودهنگام به رویدادها","رنگ ویژه در چت"]},items:[{name:"ماشین VIP",qty:"#305",image:svgImg("CAR 305","#2f5b7a","#101c2b")},{kind:"money",name:"پول داخل بازی",qty:"$5,000,000"},{kind:"donate",name:"دونیت",qty:"30"}]},
   {id:"demo1",title:"پکیج سلطنتی",desc:"بزرگ‌ترین پکیج گیتی؛ همه‌چیز برای شروعی متفاوت با یک خرید.",price:1500000,badge:"پرفروش",featured:1,end:now()+2*D+5*H,image:svgImg("ROYAL PACK","#5b4b8a","#1b1b34"),
-    items:[{name:"اسکین اختصاصی",qty:"#12",image:svgImg("SKIN 12","#7a4b6e","#2b1b34")},{name:"ماشین VIP",qty:"#305",image:svgImg("CAR 305","#2f5b7a","#101c2b")},{name:"پول داخل بازی",qty:"5,000,000"},{name:"سکه",qty:"20"}]},
-  {id:"demo2",title:"پکیج شروع",desc:"برای بازیکن‌های تازه‌وارد، با قیمتی مناسب.",price:450000,badge:"جدید",image:svgImg("START PACK","#3b6b5b","#14221e"),items:[{name:"اسکین",qty:"#7",image:svgImg("SKIN 7","#6b5b3b","#221e14")},{name:"پول داخل بازی",qty:"2,000,000"}]},
-  {id:"demo3",title:"پکیج آخر هفته",desc:"فقط تا پایان این زمان قابل خرید است.",price:780000,badge:"محدود",end:now()+9*H,stock:10,sold:7,image:svgImg("WEEKEND","#8a4b4b","#2a1414"),items:[{name:"ماشین VIP",qty:"#88",image:svgImg("CAR 88","#4b4b8a","#14142a")},{name:"سکه",qty:"10"}]}
+    items:[{name:"اسکین اختصاصی",qty:"#12",image:svgImg("SKIN 12","#7a4b6e","#2b1b34")},{name:"ماشین VIP",qty:"#305",image:svgImg("CAR 305","#2f5b7a","#101c2b")},{kind:"money",name:"پول داخل بازی",qty:"$5,000,000"},{kind:"donate",name:"دونیت",qty:"20"}]},
+  {id:"demo2",title:"پکیج شروع",desc:"برای بازیکن‌های تازه‌وارد، با قیمتی مناسب.",price:450000,badge:"جدید",image:svgImg("START PACK","#3b6b5b","#14221e"),items:[{name:"اسکین",qty:"#7",image:svgImg("SKIN 7","#6b5b3b","#221e14")},{kind:"money",name:"پول داخل بازی",qty:"$2,000,000"}]},
+  {id:"demo3",title:"پکیج آخر هفته",desc:"فقط تا پایان این زمان قابل خرید است.",price:780000,badge:"محدود",end:now()+9*H,stock:10,sold:7,image:svgImg("WEEKEND","#8a4b4b","#2a1414"),items:[{name:"ماشین VIP",qty:"#88",image:svgImg("CAR 88","#4b4b8a","#14142a")},{kind:"donate",name:"دونیت",qty:"10"}]}
 ];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safeImg=v=>{if(!v)return"";if(/^data:image\/(png|jpe?g|webp|gif|svg\+xml)[;,]/i.test(v))return v;try{const u=new URL(v,location.origin);return(u.protocol==="https:"||u.origin===location.origin)?u.href:""}catch(e){return""}};
 const fa=n=>Number(n).toLocaleString("fa-IR");
-const glyph=n=>n==="پول داخل بازی"?"$":n==="سکه"?"★":"•";
 const priceHTML=p=>`<span class="price"><img src="https://store.gitirp.ir/toman.png" alt="" onerror="this.outerHTML='<small>تومان</small>'"><span>${Number(p).toLocaleString("en-US")}</span></span>`;
+const MONEY_N="پول داخل بازی";
+function fixItem(i){
+  const kind=i.kind||(i.name===MONEY_N?"money":(i.name==="سکه"||i.name==="دونیت")?"donate":"");
+  let name=i.name||"",qty=String(i.qty||"");
+  const d=qty.replace(/[^\d]/g,"");
+  if(kind==="money"&&d){qty=/^\$/.test(qty)?qty:"$"+(Number(d)*(/میلیون/.test(qty)?1e6:1)).toLocaleString("en-US")}
+  if(kind==="donate"){name="دونیت";if(d)qty=Number(d).toLocaleString("en-US")}
+  return{name,qty,kind,image:safeImg(i.image)};
+}
 function normalize(p){
   let items=p.items;if(typeof items==="string"){try{items=JSON.parse(items)}catch(e){items=[]}}
   const t=v=>v?(Number(v)||new Date(v).getTime()||0):0;
-  return{id:String(p.id),kind:p.kind==="level"?"level":"special",meta:(p.meta&&typeof p.meta==="object")?p.meta:{},title:p.title||"",desc:p.desc||p.description||"",image:safeImg(p.image),price:Number(p.price)||0,badge:p.badge||"",featured:!!+p.featured,
+  return{id:String(p.id),kind:p.kind==="level"?"level":p.kind==="tiers"?"tiers":"special",meta:(p.meta&&typeof p.meta==="object")?p.meta:{},title:p.title||"",desc:p.desc||p.description||"",image:safeImg(p.image),price:Number(p.price)||0,badge:p.badge||"",featured:!!+p.featured,
     start:t(p.start),end:t(p.end),stock:+p.stock||0,sold:+p.sold||0,order:+p.sortOrder||0,
-    items:(Array.isArray(items)?items:[]).map(i=>({name:i.name||"",qty:i.qty||"",image:safeImg(i.image)}))};
+    items:(Array.isArray(items)?items:[]).map(fixItem)};
 }
 const isLive=p=>(!p.start||p.start<=now())&&(!p.end||p.end>now());
 const isSold=p=>p.stock>0&&p.sold>=p.stock;
@@ -367,21 +373,26 @@ const cardHTML=p=>{const sold=isSold(p),tm=p.end?left(p.end):"";
   <div class="pack-body"><div class="pack-title">${esc(p.title)}</div><div class="pack-desc">${esc(p.desc)}</div>
   <div class="pack-foot">${priceHTML(p.price)}<span class="pill${sold?" off":""}">${sold?"تمام شد":"مشاهده"}</span></div></div></article>`};
 const THEMES={bronze:["#d08a52","#5e3a22"],silver:["#d5dbe8","#69738a"],gold:["#ffd4a9","#a8742e"],diamond:["#8fd8ff","#3a6fb0"]};
-const lvColors=m=>(m.theme==="custom"&&m.color)?[m.color,`color-mix(in srgb,${m.color} 45%,#000)`]:(THEMES[m.theme]||THEMES.gold);
+const lvColors=m=>(m.theme==="custom"&&m.color)?[m.color,`color-mix(in srgb,${m.color} 45%,#000)`]:(THEMES[m.theme==="bronze"?"silver":m.theme]||THEMES.gold);
 const tiers=()=>packs.filter(p=>p.kind==="level"&&isLive(p)).sort((a,b)=>(a.meta.level||0)-(b.meta.level||0)||(a.order-b.order));
-function tiersCardHTML(lv){
+function tiersCardHTML(lv,hdr){
   const mid=Math.floor((lv.length-1)/2),min=Math.min(...lv.map(p=>p.price));
-  return`<article class="pack" data-tiers="1" tabindex="0" role="button">
-  <div class="pack-img tiers-img">${lv.map((p,i)=>{const c=lvColors(p.meta);return`<span class="lv-medal${i===mid?" mid":""}" style="--lv1:${c[0]};--lv2:${c[1]}">${i+1}</span>`}).join("")}</div>
-  <div class="pack-body"><div class="pack-title tiers-title">${lv.map(p=>esc(p.title)).join(" › ")}</div><div class="pack-desc">سه انتخاب با امکانات بیشتر در هر مرحله؛ مقایسه کن و بهترینش رو بردار.</div>
+  const custom=!!(hdr&&hdr.title);
+  const title=custom?esc(hdr.title):lv.map(p=>esc(p.title)).join(" › ");
+  const desc=esc((hdr&&hdr.desc)||"سه انتخاب با امکانات بیشتر در هر مرحله؛ مقایسه کن و بهترینش رو بردار.");
+  const medals=lv.map((p,i)=>{const c=lvColors(p.meta);return`<span class="lv-medal" style="--lv1:${c[0]};--lv2:${c[1]}">${i+1}</span>`}).join("");
+  const img=hdr&&hdr.image?`<div class="pack-img"><img src="${esc(hdr.image)}" alt="" loading="lazy" decoding="async"></div>`:`<div class="pack-img tiers-img">${medals}</div>`;
+  return`<article class="pack" data-tiers="1" tabindex="0" role="button">${img}
+  <div class="pack-body"><div class="pack-title${custom?"":" tiers-title"}">${title}</div><div class="pack-desc tiers-desc">${desc}</div>
   <div class="pack-foot"><span class="pf"><span class="from">از</span>${priceHTML(min)}</span><span class="pill">مشاهده</span></div></div></article>`;
 }
 function renderPacks(){
   const live=packs.filter(isLive);lastLive=live.length;
-  const sp=live.filter(p=>p.kind!=="level").sort((a,b)=>(b.featured-a.featured)||(a.order-b.order));
+  const sp=live.filter(p=>p.kind!=="level"&&p.kind!=="tiers").sort((a,b)=>(b.featured-a.featured)||(a.order-b.order));
   const lv=tiers();
   $("packs").hidden=!(sp.length||lv.length);
-  $("track").innerHTML=(lv.length?tiersCardHTML(lv):"")+sp.map(cardHTML).join("");
+  const hdr=live.find(p=>p.kind==="tiers");
+  $("track").innerHTML=(lv.length?tiersCardHTML(lv,hdr):"")+sp.map(cardHTML).join("");
   const cards=[...$("track").children],dots=[...$("dots").children],tr=$("track");
   $("dots").innerHTML=cards.length>1?cards.map((_,i)=>`<button class="dot${i?"":" on"}" aria-label="پکیج ${i+1}"></button>`).join(""):"";
   const dts=[...$("dots").children];
@@ -430,7 +441,7 @@ function openSheet(id,direct){
     <h3 class="s-title">${esc(p.title)}</h3>
     ${tm?`<span class="s-note" data-end="${p.end}">${tm}</span>`:""}${p.stock?`<span class="s-note">${fa(Math.max(p.stock-p.sold,0))} عدد باقی مانده</span>`:""}
     <p class="s-desc">${esc(p.desc)}</p>
-    ${p.items.length?`<div class="s-h">داخل این پکیج</div><ul class="s-items">${p.items.map(i=>`<li>${i.image?`<button class="thumb" data-zi="${z(i.image)}" aria-label="نمایش عکس"><img src="${esc(i.image)}" alt="" loading="lazy"></button>`:`<span class="tile">${glyph(i.name)}</span>`}<span class="nm">${esc(i.name)}</span><span class="q">${esc(i.qty)}</span></li>`).join("")}</ul>`:""}`;
+    ${p.items.length?`<div class="s-h">داخل این پکیج</div><ul class="s-items">${p.items.map(i=>`<li>${i.image?`<button class="thumb" data-zi="${z(i.image)}" aria-label="نمایش عکس"><img src="${esc(i.image)}" alt="" loading="lazy"></button>`:""}<span class="nm">${esc(i.name)}</span><span class="q">${esc(i.qty)}</span></li>`).join("")}</ul>`:""}`;
   $("sheetBar").innerHTML=`${priceHTML(p.price)}<button class="pill${sold?" off":""}" id="buyBtn">${sold?"تمام شد":"خرید پکیج"}</button>`;
   if(!sold)$("buyBtn").onclick=()=>openUrl(BUY_URL(p.id));
   $("sheetBody").scrollTop=0;
@@ -447,14 +458,17 @@ function openTiers(focusId,direct){
   const card=(p,i)=>{
     const c=lvColors(p.meta),prev=i>0?lv[i-1]:null,dur=p.meta.durationDays?`${fa(p.meta.durationDays)} روز`:"دائمی";
     const rows=(p.meta.benefits||[]).map(b=>`<li><span class="tick">✓</span><span class="nm">${esc(b)}</span></li>`).join("")
-      +p.items.map(it=>`<li>${it.image?`<button class="thumb" data-zi="${z(it.image)}" aria-label="نمایش عکس"><img src="${esc(it.image)}" alt="" loading="lazy"></button>`:`<span class="tile">${glyph(it.name)}</span>`}<span class="nm">${esc(it.name)}</span><span class="q">${esc(it.qty)}</span></li>`).join("");
-    return`<article class="tp-card${i===mid?" mid":""}" data-id="${esc(p.id)}" style="--lv1:${c[0]};--lv2:${c[1]}">
+      +p.items.map(it=>`<li>${it.image?`<button class="thumb" data-zi="${z(it.image)}" aria-label="نمایش عکس"><img src="${esc(it.image)}" alt="" loading="lazy"></button>`:""}<span class="nm">${esc(it.name)}</span><span class="q">${esc(it.qty)}</span></li>`).join("");
+    return`<article class="tp-card" data-id="${esc(p.id)}" style="--lv1:${c[0]};--lv2:${c[1]}">
       <span class="lv-medal">${i+1}</span><h4 class="tp-name">${esc(p.title)}</h4>${p.desc?`<p class="tp-desc">${esc(p.desc)}</p>`:""}
       <div class="tp-price">${priceHTML(p.price)}<span class="lv-dur">/ ${dur}</span></div>
       ${p.meta.includesPrev&&prev?`<div class="lv-inc">شامل همه‌ی مزایای «${esc(prev.title)}» و موارد زیر</div>`:""}
       ${rows?`<ul class="s-items lv-list">${rows}</ul>`:`<div style="flex:1"></div>`}
       <button class="pill tp-buy" data-id="${esc(p.id)}">انتخاب ${esc(p.title)}</button></article>`};
-  $("sheetBody").innerHTML=`<div class="tp-head"><div class="tp-kicker">GITI PACKS</div><h3 class="tp-title">انتخاب کن، بالا برو</h3><p class="tp-sub">هر مرحله همه‌ی امکانات مرحله‌ی قبل رو داره و بیشتر.</p></div>
+  const hdr=packs.find(p=>p.kind==="tiers"&&isLive(p));
+  const hint=`<span class="zoom-hint"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>`;
+  const head=`${hdr&&hdr.image?`<div class="s-img" data-zi="${z(hdr.image)}"><img src="${esc(hdr.image)}" alt="">${hint}</div>`:""}<div class="tp-head"><h3 class="tp-title">${esc((hdr&&hdr.title)||"انتخاب کن، بالا برو")}</h3><p class="tp-sub">${esc((hdr&&hdr.desc)||"هر مرحله همه‌ی امکانات مرحله‌ی قبل رو داره و بیشتر.")}</p></div>`;
+  $("sheetBody").innerHTML=`${head}
     <div class="tp-track" id="tpTrack">${lv.map(card).join("")}</div>
     ${lv.length>1?`<div class="dots tp-dots" id="tpDots">${lv.map((_,i)=>`<button class="dot${i===ctr?" on":""}" aria-label="${i+1}"></button>`).join("")}</div>`:""}`;
   $("sheetBar").innerHTML="";
